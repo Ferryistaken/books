@@ -70,21 +70,37 @@ for row in csv_reader:
 for isbn, book in books.items():
     with open(os.path.join(collection_dir, f"{isbn}.md"), 'w', encoding='utf-8') as file:
         file.write('---\n')
+        file.write(f"layout: book\n")
         file.write(f"title: \"{book['title']}\"\n")
         file.write(f"authors: \"{', '.join(book['authors'])}\"\n")
+        file.write("tags: [")
+        file.write(', '.join([f'{author}' for author in book['authors']]))
+        file.write("]\n")
         file.write(f"publisher: \"{book['publisher']}\"\n")
         file.write(f"publishedDate: \"{book['publishedDate']}\"\n")
         file.write(f"coverImage: \"{book.get('coverImage', '')}\"\n")
         file.write('---\n\n')
-        file.write(f"![Cover Image]({book['coverImage']})\n\n")
-        file.write(f"# {book['title']}\n\n")
-        file.write(f"**Author(s):** {', '.join(book['authors'])}\n\n")
-        file.write(f"**Publisher:** {book['publisher']}\n\n")
-        file.write(f"**Published Date:** {book['publishedDate']}\n\n")
-        file.write('## Highlights\n<ul>\n')
+        # Center and enlarge the cover image
+        file.write(f"<div style='text-align: center;'>\n")
+        file.write(f"  <img src='{book['coverImage']}' alt='{book['title']}' style='max-width: 80%;'>\n")
+        file.write(f"</div>\n\n")
+        file.write(f"<h2 style='text-align: center; font-weight: bold; font-size: 24px;'>{book['title']}</h2>\n\n")
+        # Center the authors without label and add only the year
+        file.write(f"<p style='text-align: center;'>{', '.join(book['authors'])}<br>{book['publishedDate'].split('-')[0]}</p>\n\n")
+        file.write('## Highlights\n')
+        file.write('<div style="text-align: center;">\n')
+        file.write('  <ul style="list-style-type: none; padding: 0;">\n')
         for highlight in book['highlights']:
-            file.write(f"<li>{highlight}</li>\n")
-        file.write('</ul>\n')
+            # Apply highlight styling to the text only
+            file.write(f'    <li style="font-size: 18px; margin-bottom: 10px; padding: 0;">'
+                       f'<span style="background-color: rgba(255, 226, 130, 0.5); padding: 2px;">{highlight}</span>'
+                       f'<br>'  # Add a newline (line break)
+                       f'<em>—{book["title"]}</em> by {", ".join(book["authors"])}'
+                       f'</li>\n')
+        file.write('  </ul>\n')
+        file.write('</div>\n')
+        file.write('<br>\n')
+        file.write('<br>\n')
 
 with open(cache_file, 'w', encoding='utf-8') as file:
     json.dump(cache, file, indent=4)
