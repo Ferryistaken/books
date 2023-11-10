@@ -31,7 +31,9 @@ def get_book_info(isbn, api_key, cache):
             }
             cache[isbn] = book_data
             return book_data
-    return None
+    else:
+        print("Couldn't Find Book", isbn)
+        return None
 
 api_key = os.environ.get("GOOGLE_API_KEY")
 sheet_url = 'https://docs.google.com/spreadsheets/d/1n28Iqsj9nZL-ku6HOPJPSa6KUEpQ6xO00McQ96f2dww/export?exportFormat=csv'
@@ -57,8 +59,10 @@ books = {}
 for row in csv_reader:
     isbn = row['isbn']
     highlight = row['highlight']
+    print("Finding ", isbn)
     
     if isbn not in books:
+        print("Fetching", isbn)
         book_info = get_book_info(isbn, api_key, cache)
         if book_info:
             books[isbn] = book_info

@@ -5,4 +5,5 @@ _site
 vendor
 
 google-api-key.txt
-_books
+_books/
+books_cache.json
