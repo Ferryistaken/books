@@ -33,7 +33,7 @@ def get_book_info(isbn, api_key, cache):
             return book_data
     return None
 
-api_key = read_api_key('google-api-key.txt')
+api_key = os.environ.get("GOOGLE_API_KEY")
 sheet_url = 'https://docs.google.com/spreadsheets/d/1n28Iqsj9nZL-ku6HOPJPSa6KUEpQ6xO00McQ96f2dww/export?exportFormat=csv'
 response = requests.get(sheet_url)
 if response.status_code != 200:
