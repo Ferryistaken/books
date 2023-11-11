@@ -37,12 +37,14 @@ def get_book_info(isbn, api_key, cache):
 
 api_key = os.environ.get("GOOGLE_API_KEY")
 sheet_url = 'https://docs.google.com/spreadsheets/d/1n28Iqsj9nZL-ku6HOPJPSa6KUEpQ6xO00McQ96f2dww/export?exportFormat=csv'
+
 response = requests.get(sheet_url)
 if response.status_code != 200:
     print("Failed to download the CSV file")
     exit(1)
 
-csv_reader = csv.DictReader(response.text.splitlines())
+csv_data = response.content.decode('utf-8')
+csv_reader = csv.DictReader(csv_data.splitlines())
 data_dir = '_data/books'
 collection_dir = '_books'
 os.makedirs(data_dir, exist_ok=True)
@@ -55,19 +57,21 @@ if os.path.exists(cache_file):
 else:
     cache = {}
 
+
 books = {}
 for row in csv_reader:
     isbn = row['isbn']
     highlight = row['highlight']
+    print(highlight)
     print("Finding ", isbn)
-    
+
     if isbn not in books:
         print("Fetching", isbn)
         book_info = get_book_info(isbn, api_key, cache)
         if book_info:
             books[isbn] = book_info
             books[isbn]['highlights'] = []
-    
+
     if isbn in books:
         books[isbn]['highlights'].append(highlight)
 
@@ -84,9 +88,11 @@ for isbn, book in books.items():
         file.write(f"publishedDate: \"{book['publishedDate']}\"\n")
         file.write(f"coverImage: \"{book.get('coverImage', '')}\"\n")
         file.write('---\n\n')
+        alt_text = book['title'].replace("'", "’").replace('"', "“")
         # Center and enlarge the cover image
         file.write(f"<div style='text-align: center;'>\n")
-        file.write(f"  <img src='{book['coverImage']}' alt='{book['title']}' style='max-width: 80%;'>\n")
+        alt_text = book['title'].replace("'", "’").replace('"', "“")
+        file.write(f"  <img src='{book['coverImage']}' alt='{alt_text}' style='max-width: 80%;'>\n")
         file.write(f"</div>\n\n")
         file.write(f"<h2 style='text-align: center; font-weight: bold; font-size: 24px;'>{book['title']}</h2>\n\n")
         # Center the authors without label and add only the year
@@ -95,6 +101,8 @@ for isbn, book in books.items():
         file.write('<div style="text-align: center;">\n')
         file.write('  <ul style="list-style-type: none; padding: 0;">\n')
         for highlight in book['highlights']:
+            # highlight = highlight.replace("'", "’").replace('"', "“")
+            print(highlight)
             # Apply highlight styling to the text only
             file.write(f'    <li style="font-size: 18px; margin-bottom: 10px; padding: 0;">'
                        f'<span style="background-color: rgba(255, 226, 130, 0.5); padding: 2px;">{highlight}</span>'
