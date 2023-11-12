@@ -7,6 +7,8 @@ url: "https://books.alessandroferrari.live/"
 twitter_username: BioAlessandro
 github_username: Ferryistaken
 
+mode: light
+
 plugins:
   - jekyll-feed
 
