@@ -78,7 +78,7 @@ for row in csv_reader:
 for isbn, book in books.items():
     with open(os.path.join(collection_dir, f"{isbn}.md"), 'w', encoding='utf-8') as file:
         file.write('---\n')
-        file.write(f"layout: book\n")
+        file.write(f"layout: post\n")
         file.write(f"title: \"{book['title']}\"\n")
         file.write(f"authors: \"{', '.join(book['authors'])}\"\n")
         file.write("tags: [")
