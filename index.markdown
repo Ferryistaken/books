@@ -31,6 +31,8 @@ layout: default
   }
 </style>
 
+{% include search.html %}
+
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
   {% for book in site.books %}
     <div class="book-container">
