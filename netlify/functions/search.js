@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const math = require('mathjs');
 import { pipeline } from '@xenova/transformers';
 
