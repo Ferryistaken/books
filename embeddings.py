@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
+print("Importing")
+
 import pandas as pd
 from sentence_transformers import SentenceTransformer, util
 import torch
+import json
 
 print("Generating DB")
 
@@ -21,6 +24,8 @@ embeddings = model.encode(sentences, normalize_embeddings=True)
 
 # Convert embeddings to list for JSON compatibility
 embeddings_list = embeddings.tolist()
+
+print("Saving")
 
 # Save embeddings and sentences to a JSON file
 data = {"sentences": sentences, "embeddings": embeddings_list}

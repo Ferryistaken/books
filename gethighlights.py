@@ -62,11 +62,11 @@ books = {}
 for row in csv_reader:
     isbn = row['isbn']
     highlight = row['highlight']
-    print(highlight)
-    print("Finding ", isbn)
+    # print(highlight)
+    # print("Finding ", isbn)
 
     if isbn not in books:
-        print("Fetching", isbn)
+        # print("Fetching", isbn)
         book_info = get_book_info(isbn, api_key, cache)
         if book_info:
             books[isbn] = book_info
@@ -102,7 +102,7 @@ for isbn, book in books.items():
         file.write('  <ul style="list-style-type: none; padding: 0;">\n')
         for highlight in book['highlights']:
             # highlight = highlight.replace("'", "’").replace('"', "“")
-            print(highlight)
+            # print(highlight)
             # Apply highlight styling to the text only
             file.write(f'    <li style="font-size: 18px; margin-bottom: 10px; padding: 0;">'
                        f'<span style="background-color: rgba(255, 226, 130, 0.5); padding: 2px;">{highlight}</span>'
