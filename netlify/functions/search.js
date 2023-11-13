@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const math = require('mathjs');
-const { pipeline } = require('@huggingface/transformers');
+import { pipeline } from '@xenova/transformers';
 
 exports.handler = async (event) => {
     // Load embeddings data
