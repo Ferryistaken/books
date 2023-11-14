@@ -102,7 +102,7 @@ for isbn, book in books.items():
         file.write('<div style="text-align: center;">\n')
         file.write('  <ul style="list-style-type: none; padding: 0;">\n')
         for index, highlight in enumerate(book['highlights']):
-            highlight_id = f"_{index}"
+            highlight_id = f"{index}"
             full_url = f"https://books.alessandroferrari.live/books/{isbn}.html#{highlight_id}"
             # highlight = highlight.replace("'", "’").replace('"', "“")
             # print(highlight)
