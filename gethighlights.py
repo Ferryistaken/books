@@ -4,6 +4,7 @@ import csv
 import requests
 import os
 import json
+import hashlib
 
 def read_api_key(filepath):
     with open(filepath, 'r', encoding='utf-8') as file:
@@ -100,14 +101,17 @@ for isbn, book in books.items():
         file.write('## Highlights\n')
         file.write('<div style="text-align: center;">\n')
         file.write('  <ul style="list-style-type: none; padding: 0;">\n')
-        for highlight in book['highlights']:
+        for index, highlight in enumerate(book['highlights']):
+            highlight_id = f"_{index}"
+            full_url = f"https://books.alessandroferrari.live/books/{isbn}.html#{highlight_id}"
             # highlight = highlight.replace("'", "’").replace('"', "“")
             # print(highlight)
             # Apply highlight styling to the text only
-            file.write(f'    <li style="font-size: 18px; margin-bottom: 10px; padding: 0;">'
+            file.write(f'    <li id="{highlight_id}" style="font-size: 18px; margin-bottom: 10px; padding: 0;">'
                        f'<span style="background-color: rgba(255, 226, 130, 0.5); padding: 2px;">{highlight}</span>'
                        f'<br>'  # Add a newline (line break)
                        f'<em>—{book["title"]}</em> by {", ".join(book["authors"])}'
+                       f' <a href="{full_url}" target="_blank">[Link]</a>'
                        f'</li>\n')
         file.write('  </ul>\n')
         file.write('</div>\n')
