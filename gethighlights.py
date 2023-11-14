@@ -98,6 +98,7 @@ for isbn, book in books.items():
         file.write(f"<h2 style='text-align: center; font-weight: bold; font-size: 24px;'>{book['title']}</h2>\n\n")
         # Center the authors without label and add only the year
         file.write(f"<p style='text-align: center;'>{', '.join(book['authors'])}<br>{book['publishedDate'].split('-')[0]}</p>\n\n")
+        file.write(f'<br>\n')
         file.write('## Highlights\n')
         file.write('<div style="text-align: center;">\n')
         file.write('  <ul style="list-style-type: none; padding: 0;">\n')
@@ -112,7 +113,8 @@ for isbn, book in books.items():
                        f'<br>'  # Add a newline (line break)
                        f'<em>—{book["title"]}</em> by {", ".join(book["authors"])}'
                        f' <a href="{full_url}" target="_blank">[Link]</a>'
-                       f'</li>\n')
+                       f'</li>\n'
+                       f'<br>\n')
         file.write('  </ul>\n')
         file.write('</div>\n')
         file.write('<br>\n')
