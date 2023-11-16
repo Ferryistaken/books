@@ -46,10 +46,16 @@ exports.handler = async (event) => {
     let topResults = indices.slice(0, 5);
 
     // Prepare response
-    const results = topResults.map(item => sentences[item[1]]);
+    const results = topResults.map(item => {
+        return {
+            sentence: sentences[item[1]],
+            similarity: item[0]  // Add the similarity score
+        };
+    });
 
     return {
         statusCode: 200,
         body: JSON.stringify(results)
     };
+
 };

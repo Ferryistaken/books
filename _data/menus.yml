@@ -1,3 +1,6 @@
+- title: search
+  url: /search
+  external: false
 - title: index
   url: /
   external: false

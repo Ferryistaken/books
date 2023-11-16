@@ -1,20 +1,39 @@
-<!-- Search Bar -->
-<div>
-    <input type="text" id="searchQuery" placeholder="Enter search query">
-    <button id="searchButton">Search</button>
+<div id="searchModal" style="display:none; position:fixed; z-index:1; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4); padding-top:60px;">
+    <div id="searchmodalbg" style="margin:5% auto; padding:20px; border:1px solid #888; width:80%;">
+        <!-- Search Bar -->
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="text" id="searchQuery" style="width: 90%;" placeholder="Enter semantic search query ..." style="">
+            <button id="searchButton" style="border: none; background: none;">
+                <img src="/assets/enter.svg" alt="Search" style="width: 24px; height: 24px; cursor: pointer;">
+            </button>
+        </div>
+
+        <!-- Results Display Area -->
+        <div id="searchResults"></div>
+    </div>
 </div>
 
-<!-- Results Display Area -->
-<div id="searchResults"></div>
+<!-- Trigger/Open The Modal -->
+<button id="openSearchModal" style="max-width: 12%; border: none; background: none;">
+    <img src="/assets/search.svg">
+</button>
 
 <script>
     document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('searchButton').addEventListener('click', performSearch);
+        document.getElementById('openSearchModal').addEventListener('click', function() {
+            document.getElementById('searchModal').style.display = 'block';
+        });
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.getElementById('searchModal').style.display = 'none';
+            }
+        });
     });
 
     function performSearch() {
         var query = document.getElementById('searchQuery').value;
-        var searchUrl = `{{ site.url }}/.netlify/functions/search?q=${encodeURIComponent(query)}`;
+        var searchUrl = `https://localhost:8888/.netlify/functions/search?q=${encodeURIComponent(query)}`;
 
         fetch(searchUrl)
             .then(response => response.json())
@@ -32,7 +51,13 @@
         resultsDiv.innerHTML = '';
         results.forEach(result => {
             var para = document.createElement("p");
-            para.textContent = result;
+            para.textContent = `Sentence: ${result.sentence}, Similarity: `;
+
+            var similaritySpan = document.createElement("span");
+            similaritySpan.textContent = result.similarity.toFixed(2);
+            similaritySpan.style.fontFamily = 'monospace';
+
+            para.appendChild(similaritySpan);
             resultsDiv.appendChild(para);
         });
     }

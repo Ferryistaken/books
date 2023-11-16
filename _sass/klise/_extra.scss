@@ -1,0 +1,27 @@
+input[type=text] {
+	appearance: none;
+	border: none;
+	outline: none;
+	border-bottom: .2em solid rgba($text-link-blue-active, 0.2);
+	background: $white;
+	border-radius: .2em .2em 0 0;
+	padding: .4em;
+	color: $text-base-color;
+}
+
+::-webkit-input-placeholder {
+   font-style: italic;
+}
+:-moz-placeholder {
+   font-style: italic;  
+}
+::-moz-placeholder {
+   font-style: italic;  
+}
+:-ms-input-placeholder {  
+   font-style: italic; 
+}
+
+  #searchmodalbg {
+      background-color: $white;
+  }
