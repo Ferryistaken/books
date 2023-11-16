@@ -1,5 +1,11 @@
 const math = require('mathjs');
-import { pipeline } from '@xenova/transformers';
+
+let pipeline;
+
+(async () => {
+  const transformers = await import('@xenova/transformers');
+  pipeline = transformers.pipeline;
+})();
 
 exports.handler = async (event) => {
     // URL of the embeddings JSON file
@@ -22,10 +28,16 @@ exports.handler = async (event) => {
     const queryEmbeddingOutput = await extractor(query, { pooling: 'mean', normalize: true });
     const queryEmbedding = queryEmbeddingOutput[0]; // Extract the embedding
 
+    const arrayQueryEmbedding = Array.from(queryEmbedding.data);
+
+    console.log(arrayQueryEmbedding);
+    //console.log(embeddings.every(embedding => Array.isArray(embedding))); // Should also be true
+
+
     // Calculate similarities
     let scores = embeddings.map(embedding => {
-        return math.dot(queryEmbedding, embedding) / 
-               (math.norm(queryEmbedding) * math.norm(embedding));
+        return math.dot(arrayQueryEmbedding, embedding) / 
+               (math.norm(arrayQueryEmbedding) * math.norm(embedding));
     });
 
     // Find top results
