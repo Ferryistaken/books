@@ -68,9 +68,12 @@
         highlightSpan.textContent = result.sentence;
 
         para.appendChild(highlightSpan);
-        para.appendChild(document.createElement("br"));
 
-        para.textContent += `Similarity: ${result.similarity.toFixed(2)}`;
+        var similaritySpan = document.createElement("span");
+        similaritySpan.style.fontFamily = 'monospace';
+        similaritySpan.textContent = ` [${result.similarity.toFixed(2)}]`;
+
+        para.appendChild(similaritySpan);
 
         var highlightLink = document.createElement("a");
         highlightLink.href = `{{ site.url }}/books/${result.isbn}#${result.index}`;
