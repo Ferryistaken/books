@@ -61,14 +61,16 @@
     resultsDiv.innerHTML = '';
     results.forEach(result => {
         var para = document.createElement("p");
-        para.textContent = `Sentence: ${result.sentence} : `;
 
-        var similaritySpan = document.createElement("span");
-        similaritySpan.textContent = result.similarity.toFixed(2);
-        similaritySpan.style.fontFamily = 'monospace';
-        para.appendChild(similaritySpan);
+        var highlightSpan = document.createElement("span");
+        highlightSpan.style.backgroundColor = "rgba(255, 226, 130, 0.5)";
+        highlightSpan.style.padding = "2px";
+        highlightSpan.textContent = result.sentence;
 
-        console.log(result);
+        para.appendChild(highlightSpan);
+        para.appendChild(document.createElement("br"));
+
+        para.textContent += `Similarity: ${result.similarity.toFixed(2)}`;
 
         var highlightLink = document.createElement("a");
         highlightLink.href = `{{ site.url }}/books/${result.isbn}#${result.index}`;
