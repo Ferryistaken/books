@@ -14,7 +14,7 @@
 
     function performSearch() {
         var query = document.getElementById('searchQuery').value;
-        var searchUrl = `https://{{ site.url }}/.netlify/functions/search?q=${encodeURIComponent(query)}`;
+        var searchUrl = `{{ site.url }}/.netlify/functions/search?q=${encodeURIComponent(query)}`;
 
         fetch(searchUrl)
             .then(response => response.json())
