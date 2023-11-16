@@ -57,18 +57,26 @@
     }
 
     function displayResults(results) {
-        var resultsDiv = document.getElementById('searchResults');
-        resultsDiv.innerHTML = '';
-        results.forEach(result => {
-            var para = document.createElement("p");
-            para.textContent = `Sentence: ${result.sentence}, Similarity: `;
+    var resultsDiv = document.getElementById('searchResults');
+    resultsDiv.innerHTML = '';
+    results.forEach(result => {
+        var para = document.createElement("p");
+        para.textContent = `Sentence: ${result.sentence} : `;
 
-            var similaritySpan = document.createElement("span");
-            similaritySpan.textContent = result.similarity.toFixed(2);
-            similaritySpan.style.fontFamily = 'monospace';
+        var similaritySpan = document.createElement("span");
+        similaritySpan.textContent = result.similarity.toFixed(2);
+        similaritySpan.style.fontFamily = 'monospace';
+        para.appendChild(similaritySpan);
 
-            para.appendChild(similaritySpan);
-            resultsDiv.appendChild(para);
-        });
-    }
+        console.log(result);
+
+        var highlightLink = document.createElement("a");
+        highlightLink.href = `{{ site.url }}/books/${result.isbn}#${result.index}`;
+        highlightLink.textContent = " View Highlight";
+        highlightLink.target = "_blank";
+        para.appendChild(highlightLink);
+
+        resultsDiv.appendChild(para);
+    });
+}
 </script>

@@ -9,7 +9,7 @@ let pipeline;
 
 exports.handler = async (event) => {
     // URL of the embeddings JSON file
-    const embeddingsUrl = 'https://books.alessandroferrari.live/embeddings.json';
+    const embeddingsUrl = 'http://books.alessandroferrari.live/embeddings.json';
 
     // Fetch the embeddings data from the URL
     const response = await fetch(embeddingsUrl);
@@ -17,6 +17,11 @@ exports.handler = async (event) => {
 
     const sentences = data.sentences;
     const embeddings = data.embeddings;
+    const isbns = data.isbns; // Include the ISBNs
+    const indexes = data.indices;
+
+    console.log(isbns);
+    console.log(indexes);
 
     // Extract query from event
     const query = event.queryStringParameters.q;
@@ -45,11 +50,15 @@ exports.handler = async (event) => {
     indices.sort((a, b) => b[0] - a[0]);
     let topResults = indices.slice(0, 5);
 
+    console.log(topResults);
+
     // Prepare response
     const results = topResults.map(item => {
         return {
             sentence: sentences[item[1]],
-            similarity: item[0]  // Add the similarity score
+            similarity: item[0],  // Add the similarity score
+            isbn: isbns[item[1]], // Include the ISBN
+            index: indexes[item[1]]
         };
     });
 
