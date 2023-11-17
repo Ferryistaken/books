@@ -3,3 +3,5 @@ pandas
 sentence-transformers
 -f https://download.pytorch.org/whl/cpu
 torch
+umap-learn
+matplotlib
