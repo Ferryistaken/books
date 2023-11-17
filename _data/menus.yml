@@ -1,6 +1,9 @@
 - title: index
   url: /
   external: false
+- title: vector space
+  url: /plot
+  external: false
 - title: home
   url: https://alessandroferrari.live/
   external: false
