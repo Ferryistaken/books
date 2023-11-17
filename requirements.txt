@@ -5,3 +5,5 @@ sentence-transformers
 torch
 umap-learn
 matplotlib
+plotly
+numpy
