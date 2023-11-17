@@ -81,5 +81,5 @@ plt.ylabel('UMAP Dimension 2')
 plt.legend(title='Book Title', bbox_to_anchor=(1.05, 1), loc='upper left')
 
 # Save the plot as a PNG file
-plt.savefig("umap_embeddings_colored_and_shaped_by_book_title.png", dpi=300, bbox_inches='tight')
+plt.savefig("umap.png", dpi=300, bbox_inches='tight')
 
