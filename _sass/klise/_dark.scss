@@ -2,6 +2,10 @@ body[data-theme="dark"] {
   color: $dark-text-base-color;
   background-color: $dark-black;
 
+  .svg-icon {
+    stroke: $dark-white;
+  }
+
   input[type=text] {
       appearance: none;
       border: none;
@@ -134,6 +138,8 @@ body[data-theme="dark"] {
   b {
     color: $dark-white;
   }
+
+
 
   // Navbar
   .navbar {

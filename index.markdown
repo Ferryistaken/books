@@ -34,7 +34,7 @@ layout: default
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
   {% for book in site.books %}
     <div class="book-container">
-      <img class="book-image" src="{{ book.coverImage }}" alt="{{ book.title }}">
+      <a href="{{ book.url | relative_url }}"><img class="book-image" src="{{ book.coverImage }}" alt="{{ book.title }}"></a>
       <h2 class="book-title"><a href="{{ book.url | relative_url }}">{{ book.title }}</a></h2>
       <p class="book-author">{{ book.authors | join: ', ' }}</p>
     </div>

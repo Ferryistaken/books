@@ -22,6 +22,12 @@ input[type=text] {
    font-style: italic; 
 }
 
-  #searchmodalbg {
-      background-color: $white;
-  }
+#searchmodalbg {
+  background-color: $white;
+}
+
+.svg-icon.clicked {
+    /* Example: scale transformation for a "pop" effect */
+    transform: scale(0.9);
+    transition: transform 0.01s;
+}
