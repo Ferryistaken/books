@@ -6,8 +6,6 @@ layout: default
 
 ---
 
-<br>
-
 <style>
   /* Add CSS styling for the book containers */
   .book-container {
@@ -32,6 +30,8 @@ layout: default
 </style>
 
 [How I made this](https://alessandroferrari.live/book-highlights).
+<br>
+<br>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
   {% for book in site.books %}
