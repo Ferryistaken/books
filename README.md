@@ -1,7 +1,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2423e3e6-52d9-40e1-940a-0276913477e1/deploy-status)](https://app.netlify.com/sites/comfy-bunny-349a79/deploys)
 
 <p align="center">
-    <img src="https://books.alessandroferrari.live/book-ss.png">
+    <img src="https://books.alessandroferrari.live/assets/book-ss.png">
 </p>
 
 <img src="https://alessandroferrari.live/assets/posts/book-highlights/book-highlight-diagram.png" alt="img" align="right" width="400px">
