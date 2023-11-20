@@ -9,7 +9,7 @@ let pipeline;
 
 exports.handler = async (event) => {
     // URL of the embeddings JSON file
-    const embeddingsUrl = 'https://books.alessandroferrari.live/embeddings.json';
+    const embeddingsUrl = 'http://books.alessandroferrari.live/embeddings.json';
 
     // Fetch the embeddings data from the URL
     const response = await fetch(embeddingsUrl);
