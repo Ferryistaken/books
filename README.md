@@ -23,6 +23,8 @@
 
 - 🪄 **Interactive Visualization:** Explore a live representation of your highlights in a dynamic vector space. Simply hover your mouse over the dots to discover your insights.
 
+- ✍ **Build your own**: Read a writeup of how I set this whole system up [on my blog](https://alessandroferrari.live/book-highlights/).
+
 ## How it Works
 
 ### Step 1: Getting the Data
