@@ -1,13 +1,8 @@
 const math = require('mathjs');
 
-let pipeline;
-
-(async () => {
-  const transformers = await import('@xenova/transformers');
-  pipeline = transformers.pipeline;
-})();
-
 exports.handler = async (event) => {
+    const transformers = await import('@xenova/transformers');
+    const pipeline = transformers.pipeline;
     // URL of the embeddings JSON file
     const embeddingsUrl = 'https://books.alessandroferrari.live/embeddings.json';
     //const embeddingsUrl = 'http://localhost:8888/embeddings.json';
@@ -20,11 +15,11 @@ exports.handler = async (event) => {
     const embeddings = data.embeddings;
     const isbns = data.isbns; // Include the ISBNs
     const indexes = data.group_indices;
-    const titles = data.title;
+    const titles = data.titles;
     const authors = data.authors;
 
-    console.log(isbns);
-    console.log(indexes);
+    console.log(titles);
+    console.log(authors);
 
     // Extract query from event
     const query = event.queryStringParameters.q;
@@ -37,10 +32,6 @@ exports.handler = async (event) => {
     const queryEmbedding = queryEmbeddingOutput[0]; // Extract the embedding
 
     const arrayQueryEmbedding = Array.from(queryEmbedding.data);
-
-    //console.log(arrayQueryEmbedding);
-    //console.log(embeddings.every(embedding => Array.isArray(embedding))); // Should also be true
-
 
     // Calculate similarities
     let scores = embeddings.map(embedding => {

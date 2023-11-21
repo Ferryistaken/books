@@ -61,6 +61,7 @@
     var resultsDiv = document.getElementById('searchResults');
     resultsDiv.innerHTML = '';
     results.forEach(result => {
+        var lineBreak = document.createElement("br");
         var para = document.createElement("p");
 
         var highlightSpan = document.createElement("span");
@@ -73,11 +74,9 @@
         var titleSpan = document.createElement("span");
         titleSpan.textContent = result.title;
         titleSpan.style.fontStyle = 'italic';
+        para.appendChild(lineBreak);
         para.appendChild(titleSpan);
 
-        var authorSpan = document.createElement("span");
-        authorSpan.textContent = result.authors + " - ";
-        para.appendChild(authorSpan);
 
         var similaritySpan = document.createElement("span");
         similaritySpan.style.fontFamily = 'monospace';
