@@ -9,7 +9,8 @@ let pipeline;
 
 exports.handler = async (event) => {
     // URL of the embeddings JSON file
-    const embeddingsUrl = 'https://books.alessandroferrari.live/embeddings.json';
+    //const embeddingsUrl = 'https://books.alessandroferrari.live/embeddings.json';
+    const embeddingsUrl = 'http://localhost:8888/embeddings.json';
 
     // Fetch the embeddings data from the URL
     const response = await fetch(embeddingsUrl);
@@ -19,6 +20,8 @@ exports.handler = async (event) => {
     const embeddings = data.embeddings;
     const isbns = data.isbns; // Include the ISBNs
     const indexes = data.group_indices;
+    const titles = data.title;
+    const authors = data.authors;
 
     console.log(isbns);
     console.log(indexes);
@@ -56,7 +59,9 @@ exports.handler = async (event) => {
             sentence: sentences[item[1]],
             similarity: item[0],  // Add the similarity score
             isbn: isbns[item[1]], // Include the ISBN
-            index: indexes[item[1]]
+            index: indexes[item[1]],
+            author: authors[item[1]],
+            title: titles[item[1]],
         };
     });
 

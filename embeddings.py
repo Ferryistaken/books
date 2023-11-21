@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 print("Loading libraries")
 
 import pandas as pd
@@ -9,23 +11,24 @@ import numpy as np
 import requests
 import os
 
-def get_book_title(isbn):
+def get_book_info(isbn):
     api_key = os.environ.get('GOOGLE_API_KEY')
     url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&key={api_key}"
     response = requests.get(url)
 
     if response.status_code != 200:
-        return "Title Not Found"
+        return "Title Not Found", "Author Not Found"
 
     data = response.json()
     if "items" in data:
         try:
             title = data["items"][0]["volumeInfo"]["title"]
-            return title
+            authors = data["items"][0]["volumeInfo"].get("authors", ["Author Not Found"])
+            return title, ', '.join(authors)  # In case there are multiple authors
         except (IndexError, KeyError):
-            return "Title Not Found"
+            return "Title Not Found", "Author Not Found"
     else:
-        return "Title Not Found"
+        return "Title Not Found", "Author Not Found"
 
 print("Loading Model")
 
@@ -49,6 +52,13 @@ sentences = df['highlight'].tolist()
 isbns = df['isbn'].tolist()
 group_indices = df['group_index'].tolist()
 
+unique_isbns = set(isbns)
+isbn_to_info = {isbn: get_book_info(isbn) for isbn in unique_isbns}
+
+# Create arrays for titles and authors
+titles = [isbn_to_info[isbn][0] for isbn in isbns]
+authors = [isbn_to_info[isbn][1] for isbn in isbns]
+
 print("Encoding data")
 
 # Generate embeddings
@@ -60,7 +70,9 @@ data = {
     "sentences": sentences, 
     "embeddings": embeddings_list, 
     "isbns": isbns, 
-    "group_indices": group_indices
+    "group_indices": group_indices,
+    "titles": titles,  # Add the book titles
+    "authors": authors  # Add the authors
 }
 
 print("Saving embeddings")
@@ -75,9 +87,6 @@ umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit
 
 markers = ['o', 's', '^', 'D', '*', 'x', '+', '>', '<', 'p', 'h', 'H', 'X', 'd']
 
-# Creating a color map and fetching titles for each unique ISBN
-unique_isbns = list(set(isbns))
-isbn_to_title = {isbn: get_book_title(isbn) for isbn in unique_isbns}
 colors = plt.cm.jet(np.linspace(0, 1, len(unique_isbns)))
 isbn_to_color = {isbn: color for isbn, color in zip(unique_isbns, colors)}
 
@@ -99,10 +108,10 @@ for idx, isbn in enumerate(unique_isbns):
     centroid_y = np.mean(umap_embeddings[indices, 1])
 
     # Annotate with book title at the centroid
-    plt.annotate(isbn_to_title[isbn], (centroid_x, centroid_y), fontsize=9, ha='center', va='center', color='white')
+    plt.annotate(isbn_to_info[isbn], (centroid_x, centroid_y), fontsize=9, ha='center', va='center', color='white')
 
     # Create a custom legend entry for each ISBN
-    legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=isbn_to_title[isbn], markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
+    legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=isbn_to_info[isbn], markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
 
 plt.title('Vector Space (UMAP)', fontsize=20)
 
