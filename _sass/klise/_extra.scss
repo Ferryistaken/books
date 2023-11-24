@@ -31,3 +31,31 @@ input[type=text] {
     transform: scale(0.9);
     transition: transform 0.01s;
 }
+
+.button-style {
+  background-color: $light; // Light background color
+  color: $text-base-color; // Text color
+  font-family: $sans-family; // Sans-serif font
+  font-size: $medium-font-size; // Medium font size
+  font-weight: $normal-weight; // Normal font weight
+  border: none; // No border
+  border-radius: 4px; // Slightly rounded corners
+  padding: 10px 15px; // Padding
+  margin: $spacing-half; // Margin based on spacing
+  cursor: pointer; // Cursor changes on hover
+  transition: background-color 0.3s, color 0.3s; // Smooth transition for hover effects
+
+  &:hover {
+    background-color: $smoke; // Change background on hover
+    color: $text-link-blue; // Change text color on hover
+  }
+
+  &:active {
+    background-color: $gray; // Background for active state
+    color: $text-link-blue-active; // Text color for active state
+  }
+
+  @include media-query($on-mobile) {
+    font-size: $small-font-size; // Adjust font size for mobile
+  }
+}

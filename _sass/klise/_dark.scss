@@ -21,6 +21,27 @@ body[data-theme="dark"] {
       background-color: $dark-black;
   }
 
+  .button-style {
+    background-color: $dark-light; // Dark mode background color
+    color: $dark-text-base-color; // Dark mode text color
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    margin: $spacing-half;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: $dark-smoke; // Dark mode background color on hover
+      color: $dark-text-link-blue; // Dark mode text color on hover
+    }
+
+    &:active {
+      background-color: $dark-gray; // Dark mode background color for active state
+      color: $dark-text-link-blue-active; // Dark mode text color for active state
+    }
+  }
+
   // Heading
   h1,
   h2,
