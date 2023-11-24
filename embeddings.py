@@ -113,11 +113,9 @@ for idx, isbn in enumerate(unique_isbns):
     # Create a custom legend entry for each ISBN
     legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=isbn_to_info[isbn], markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
 
-plt.title('Vector Space (UMAP)', fontsize=20)
+plt.legend(handles=legend_elements, title='Books', bbox_to_anchor=(1.05, 1), loc='upper left')
 
-# Add a legend and adjust its properties
-legend = plt.legend(handles=legend_elements, title='', loc='upper right', bbox_to_anchor=(1, 0.9), bbox_transform=plt.gcf().transFigure)
-legend.get_frame().set_alpha(0.5)  # Adjust the opacity
+plt.title('Vector Space (UMAP)', fontsize=20)
 
 plt.grid(False)
 plt.axis('off')
