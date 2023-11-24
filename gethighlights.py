@@ -77,11 +77,15 @@ for row in csv_reader:
         books[isbn]['highlights'].append(highlight)
 
 for isbn, book in books.items():
+    first_author = book['authors'][0].split()
+    first_author_last_name = first_author[-1] if first_author else "Unknown"
+
     with open(os.path.join(collection_dir, f"{isbn}.md"), 'w', encoding='utf-8') as file:
         file.write('---\n')
         file.write('layout: post\n')
         file.write(f"title: \"{book['title']}\"\n")
         file.write(f"authors: \"{', '.join(book['authors'])}\"\n")
+        file.write(f"first-author-last-name: \"{first_author_last_name}\"\n")  # Add the new field
         file.write(f"publisher: \"{book['publisher']}\"\n")
         file.write(f"publishedDate: \"{book['publishedDate']}\"\n")
         file.write(f"coverImage: \"{book.get('coverImage', '')}\"\n")
