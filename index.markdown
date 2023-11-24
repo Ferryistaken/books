@@ -33,8 +33,10 @@ layout: default
 <br>
 <br>
 
+
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
-  {% for book in site.books %}
+  {% assign sorted_books = site.books | sort: 'authors' %}
+  {% for book in sorted_books %}
     <div class="book-container">
       <a href="{{ book.url | relative_url }}"><img class="book-image" src="{{ book.coverImage }}" alt="{{ book.title }}"></a>
       <h2 class="book-title"><a href="{{ book.url | relative_url }}">{{ book.title }}</a></h2>
@@ -42,4 +44,3 @@ layout: default
     </div>
   {% endfor %}
 </div>
-
