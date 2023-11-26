@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import json
 import plotly.graph_objects as go
 import plotly.express as px
@@ -7,6 +9,8 @@ import numpy as np
 import os
 import requests
 import textwrap
+
+print("✅ Loaded libraries")
 
 # Function to fetch book titles using Google Books API
 def get_book_title(isbn):
@@ -31,12 +35,16 @@ def get_book_title(isbn):
 with open("embeddings.json", "r") as file:
     data = json.load(file)
 
+print("✅ Data loaded from 'embeddings.json'")
+
 embeddings = np.array(data["embeddings"])
 sentences = data["sentences"]
 isbns = data["isbns"]
 
 # Dimensionality reduction using UMAP
 umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit_transform(embeddings)
+
+print("✅ Created UMAP")
 
 # Get unique ISBNs and their corresponding titles
 unique_isbns = list(set(isbns))
@@ -68,6 +76,7 @@ plot_data = pd.DataFrame({
     'isbn': isbns
 })
 
+
 # Create Plotly figure
 fig = go.Figure()
 
@@ -93,3 +102,43 @@ fig.update_layout(
 
 # Save the figure as an HTML file
 fig.write_html("plotly-out.html")
+
+print("✅ Plotted first figure")
+
+squareFig = go.Figure()
+
+for idx, isbn in enumerate(unique_isbns):
+    isbn_data = plot_data[plot_data['isbn'] == isbn]
+    squareFig.add_trace(go.Scatter(
+        x=isbn_data['x'],
+        y=isbn_data['y'],
+        mode='markers',
+        marker=dict(color=colors[idx % len(colors)], size=10),
+        text=isbn_data['text'],  # Include the wrapped text with URL
+        hoverinfo='text',       # Only show the text on hover
+        name=isbn_to_title[isbn]
+    ))
+
+# Update layout for square plot without legend
+squareFig.update_layout(
+    title='',
+    plot_bgcolor='white',
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+    showlegend=False,  # Disable the legend
+    autosize=False,    # Disable autosizing
+    width=350,         # Width of the plot
+    height=350,         # Height of the plot (same as width for square)
+    margin=dict(       # Adjust margins to fit in an iframe without scrollbars
+        l=100,           # Left margin
+        r=0,           # Right margin
+        b=0,           # Bottom margin
+        t=0,           # Top margin
+        pad=0          # Padding
+    )
+)
+
+# Save the squareFigure as an HTML file with a new name
+squareFig.write_html("square-plot.html")
+
+print("✅ Plotted Second Figure")

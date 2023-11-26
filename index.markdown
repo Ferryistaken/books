@@ -30,8 +30,9 @@ layout: default
 </style>
 
 [How I made this](https://alessandroferrari.live/book-highlights).
-<br>
-<br>
+<div style="text-align: center; margin: 0; overflow: hidden;">
+<iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0;"></iframe>
+</div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
   {% assign sorted_books = site.books | sort: 'first-author-last-name' %}
