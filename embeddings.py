@@ -6,6 +6,7 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer
 import json
 import umap.umap_ as umap
+from adjustText import adjust_text
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
@@ -95,6 +96,7 @@ plt.style.use('https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitay
 # Plotting
 plt.figure(figsize=(12,10))
 legend_elements = []
+texts = []  # List to store all the texts for adjust_text
 
 for idx, isbn in enumerate(unique_isbns):
     indices = [i for i, x in enumerate(isbns) if x == isbn]
@@ -108,15 +110,18 @@ for idx, isbn in enumerate(unique_isbns):
     centroid_y = np.mean(umap_embeddings[indices, 1])
 
     # Annotate with book title at the centroid
-    plt.annotate(isbn_to_info[isbn], (centroid_x, centroid_y), fontsize=9, ha='center', va='center', color='white')
+    text = plt.text(centroid_x, centroid_y, isbn_to_info[isbn], fontsize=8, ha='center', va='center', color='white')
+    texts.append(text)
 
     # Create a custom legend entry for each ISBN
     legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=isbn_to_info[isbn], markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
 
 plt.legend(handles=legend_elements, title='Books', bbox_to_anchor=(1.05, 1), loc='upper left')
 
-plt.title('Vector Space (UMAP)', fontsize=20)
+# Use adjust_text to iteratively adjust text position
+adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
 
+plt.title('Vector Space (UMAP)', fontsize=20)
 plt.grid(False)
 plt.axis('off')
 
