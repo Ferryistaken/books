@@ -10,7 +10,7 @@ import os
 import requests
 import textwrap
 
-print("✅ Loaded libraries")
+print("- ✅ Loaded libraries")
 
 # Function to fetch book titles using Google Books API
 def get_book_title(isbn):
@@ -35,7 +35,7 @@ def get_book_title(isbn):
 with open("embeddings.json", "r") as file:
     data = json.load(file)
 
-print("✅ Data loaded from 'embeddings.json'")
+print("- ✅ Data loaded from 'embeddings.json'")
 
 embeddings = np.array(data["embeddings"])
 sentences = data["sentences"]
@@ -44,7 +44,7 @@ isbns = data["isbns"]
 # Dimensionality reduction using UMAP
 umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit_transform(embeddings)
 
-print("✅ Created UMAP")
+print("- ✅ Created UMAP")
 
 # Get unique ISBNs and their corresponding titles
 unique_isbns = list(set(isbns))
@@ -64,7 +64,7 @@ urls = [generate_url(isbn) for isbn in isbns]
 
 # Wrap text for each highlight and append URL
 wrapped_sentences_with_url = [
-    '<br>'.join(textwrap.wrap(sentence, width=80)) + f"<br>URL: {url}" 
+    '<br>'.join(textwrap.wrap(str(sentence), width=80)) + f"<br>URL: {url}" 
     for sentence, url in zip(sentences, urls)
 ]
 
@@ -103,7 +103,7 @@ fig.update_layout(
 # Save the figure as an HTML file
 fig.write_html("plotly-out.html")
 
-print("✅ Plotted first figure")
+print("- ✅ Plotted first figure")
 
 squareFig = go.Figure()
 
@@ -141,4 +141,4 @@ squareFig.update_layout(
 # Save the squareFigure as an HTML file with a new name
 squareFig.write_html("square-plot.html")
 
-print("✅ Plotted Second Figure")
+print("- ✅ Plotted Second Figure")
