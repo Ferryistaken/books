@@ -1,0 +1,10 @@
+{
+  "name": "Ferry's Books",
+  "short_name": "Books",
+  "theme_color": "#00325a",
+  "background_color": "#1d2434",
+  "display": "browser",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/"
+}

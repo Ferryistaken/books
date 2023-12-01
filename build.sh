@@ -27,6 +27,7 @@ print_success "gethighlights.py executed."
 
 # Building with Jekyll
 bundle exec jekyll build
+workbox generateSW workbox-config.js
 print_success "Jekyll build completed."
 
 echo "Build process finished."

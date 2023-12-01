@@ -8,6 +8,7 @@
   <meta name="application-name" content="{{ site.title }}" />
   <meta name="apple-mobile-web-app-status-bar-style" content="#fff" />
   <meta name="apple-mobile-web-app-title" content="{{ site.title }}" />
+<link rel="manifest" href="{{ "/manifest.json" | prepend: site.baseurl | prepend: site.url }}" />
   <!-- for mathjax support -->
   {% if page.usemathjax %}
   <script type="text/x-mathjax-config">

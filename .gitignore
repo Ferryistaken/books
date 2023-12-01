@@ -4,6 +4,8 @@ _site
 .jekyll-metadata
 vendor
 
+push.sh
+
 google-api-key.txt
 _books/
 books_cache.json
