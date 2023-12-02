@@ -40,7 +40,29 @@ model.max_seq_length = 256
 print("Loading data")
 
 # Read the CSV file
+# Read the CSV file
 df = pd.read_csv('sheet.csv')
+
+df['highlight'] = df['highlight'].astype(str).str.strip()
+
+# Remove rows with NaN or empty strings in 'highlight'
+df = df[(df['highlight'].str.lower() != 'nan') & (df['highlight'] != '')]
+
+# If there are no valid rows left, exit the script
+if df.empty:
+    print("No data to process")
+    exit(0)
+
+# Group the DataFrame by ISBN and filter out groups with no valid highlights
+df = df.groupby('isbn').filter(lambda x: x['highlight'].str.strip().astype(bool).any())
+
+# If there are no books with valid highlights, exit the script
+if df.empty:
+    print("No books with valid highlights to process")
+    exit(0)
+
+# Reset index after filtering
+df.reset_index(drop=True, inplace=True)
 
 # Maintain the original 'index' column
 df['original_index'] = df.index
@@ -49,7 +71,7 @@ df['original_index'] = df.index
 df['group_index'] = df.groupby('isbn').cumcount()
 
 # Extract sentences (highlights/quotes), ISBNs, and group indices
-sentences = df['highlight'].tolist()
+sentences = df['highlight'].astype(str).tolist()  # Convert highlights to strings
 isbns = df['isbn'].tolist()
 group_indices = df['group_index'].tolist()
 
@@ -63,7 +85,11 @@ authors = [isbn_to_info[isbn][1] for isbn in isbns]
 print("Encoding data")
 
 # Generate embeddings
-embeddings = model.encode(sentences, normalize_embeddings=True)
+try:
+    embeddings = model.encode(sentences, normalize_embeddings=True)
+except Exception as e:
+    print(f"Error during encoding: {e}")
+    exit(1)
 
 # Convert embeddings to list for JSON compatibility and save to JSON
 embeddings_list = embeddings.tolist()

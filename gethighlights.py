@@ -89,11 +89,15 @@ for isbn, book in books.items():
         file.write(f"publisher: \"{book['publisher']}\"\n")
         file.write(f"publishedDate: \"{book['publishedDate']}\"\n")
         file.write(f"coverImage: \"{book.get('coverImage', '')}\"\n")
-        file.write('highlights:\n')
-        for highlight in book['highlights']:
-            highlight = highlight.replace('"', '\\"')
 
-            file.write(f"  - \"{highlight}\"\n")
+        # Check if there are any non-empty highlights
+        non_empty_highlights = [h for h in book['highlights'] if h.strip()]
+        if non_empty_highlights:
+            file.write('highlights:\n')
+            for highlight in non_empty_highlights:
+                highlight = highlight.replace('"', '\\"')
+                file.write(f"  - \"{highlight}\"\n")
+
         file.write('---\n\n')
 
 with open(cache_file, 'w', encoding='utf-8') as file:
