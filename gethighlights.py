@@ -33,6 +33,7 @@ def get_book_info(isbn, api_key, cache):
             cache[isbn] = book_data
             return book_data
     else:
+        print(response.json())
         print("Couldn't Find Book", isbn)
         return None
 
