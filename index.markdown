@@ -31,7 +31,13 @@ layout: default
 
 {% assign count = site.books | size %}
 
-[How I made this](https://alessandroferrari.live/book-highlights) \| 📖 Total Books: {{count}}
+{% assign total_highlights = 0 %}
+{% for book in site.books %}
+  {% assign highlights_count = book.highlights | size %}
+  {% assign total_highlights = total_highlights | plus: highlights_count %}
+{% endfor %}
+
+[How I made this](https://alessandroferrari.live/book-highlights) \| 📖 Total Books: {{count}} \| 💡 Total Highlights: {{total_highlights}}
 
 <div style="text-align: center; margin: 0; overflow: hidden;">
 <iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0;"></iframe>
