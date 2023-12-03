@@ -95,6 +95,8 @@ umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit
 
 markers = ['o', 's', '^', 'D', '*', 'x', '+', '>', '<', 'p', 'h', 'H', 'X', 'd']
 
+unique_isbns = set(df['isbn'])
+
 colors = plt.cm.jet(np.linspace(0, 1, len(unique_isbns)))
 isbn_to_color = {isbn: color for isbn, color in zip(unique_isbns, colors)}
 

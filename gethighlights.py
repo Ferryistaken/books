@@ -3,6 +3,7 @@
 import csv
 import os
 import json
+import requests
 
 sheet_url = 'https://docs.google.com/spreadsheets/d/1n28Iqsj9nZL-ku6HOPJPSa6KUEpQ6xO00McQ96f2dww/export?exportFormat=csv'
 response = requests.get(sheet_url)
