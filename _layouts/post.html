@@ -23,7 +23,7 @@ layout: default
 </head>
 <body>
     <div style='text-align: center;'>
-        <img src='{{ page.coverImage }}' alt='{{ page.title }}' style='max-width: 80%;'>
+        {% include lazyload.html image_src=page.coverImage image_alt=page.title image_title=page.title %}
     </div>
 
     <h2 style='text-align: center; font-weight: bold; font-size: 24px;'>{{ page.title }}</h2>

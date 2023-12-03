@@ -20,13 +20,18 @@ def fetch_and_cache_books_data(sheet_url, cache_file):
 
     api_key = os.environ.get("GOOGLE_API_KEY")
     cache = {}
+
+    google_calls = 0
     for isbn in unique_isbns:
         book_data = get_book_info(isbn, api_key)
+        google_calls += 1
         if book_data:
             cache[isbn] = book_data
 
     with open(cache_file, 'w', encoding='utf-8') as file:
         json.dump(cache, file, indent=4)
+
+    return google_calls
 
 def get_book_info(isbn, api_key):
     url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&key={api_key}"
@@ -52,5 +57,7 @@ def get_book_info(isbn, api_key):
 if __name__ == "__main__":
     sheet_url = 'https://docs.google.com/spreadsheets/d/1n28Iqsj9nZL-ku6HOPJPSa6KUEpQ6xO00McQ96f2dww/export?exportFormat=csv'
     cache_file = 'books_cache.json'
-    fetch_and_cache_books_data(sheet_url, cache_file)
+    google_calls = fetch_and_cache_books_data(sheet_url, cache_file)
+
+    print("TOTAL GOOGLE CALLS: ", google_calls)
 
