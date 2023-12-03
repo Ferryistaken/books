@@ -12,25 +12,6 @@ import numpy as np
 import requests
 import os
 
-def get_book_info(isbn):
-    api_key = os.environ.get('GOOGLE_API_KEY')
-    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&key={api_key}"
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        return "Title Not Found", "Author Not Found"
-
-    data = response.json()
-    if "items" in data:
-        try:
-            title = data["items"][0]["volumeInfo"]["title"]
-            authors = data["items"][0]["volumeInfo"].get("authors", ["Author Not Found"])
-            return title, ', '.join(authors)  # In case there are multiple authors
-        except (IndexError, KeyError):
-            return "Title Not Found", "Author Not Found"
-    else:
-        return "Title Not Found", "Author Not Found"
-
 print("Loading Model")
 
 # Load the model
@@ -40,8 +21,11 @@ model.max_seq_length = 256
 print("Loading data")
 
 # Read the CSV file
-# Read the CSV file
 df = pd.read_csv('sheet.csv')
+
+# Load cached book data
+with open("books_cache.json", "r") as file:
+    isbn_to_info = json.load(file)
 
 df['highlight'] = df['highlight'].astype(str).str.strip()
 
@@ -75,12 +59,9 @@ sentences = df['highlight'].astype(str).tolist()  # Convert highlights to string
 isbns = df['isbn'].tolist()
 group_indices = df['group_index'].tolist()
 
-unique_isbns = set(isbns)
-isbn_to_info = {isbn: get_book_info(isbn) for isbn in unique_isbns}
-
 # Create arrays for titles and authors
-titles = [isbn_to_info[isbn][0] for isbn in isbns]
-authors = [isbn_to_info[isbn][1] for isbn in isbns]
+titles = [isbn_to_info[isbn]["title"] if isbn in isbn_to_info else "Title Not Found" for isbn in isbns]
+authors = [', '.join(isbn_to_info[isbn]["authors"]) if isbn in isbn_to_info else "Author Not Found" for isbn in isbns]
 
 print("Encoding data")
 
@@ -135,12 +116,12 @@ for idx, isbn in enumerate(unique_isbns):
     centroid_x = np.mean(umap_embeddings[indices, 0])
     centroid_y = np.mean(umap_embeddings[indices, 1])
 
-    # Annotate with book title at the centroid
-    text = plt.text(centroid_x, centroid_y, isbn_to_info[isbn], fontsize=8, ha='center', va='center', color='white')
+    title = isbn_to_info[isbn]["title"] if isbn in isbn_to_info else "Title Not Found"
+    authors = ', '.join(isbn_to_info[isbn]["authors"]) if isbn in isbn_to_info else "Author Not Found"
+    book_label = f"{title} by {authors}"
+    text = plt.text(centroid_x, centroid_y, book_label, fontsize=8, ha='center', va='center', color='white')
     texts.append(text)
-
-    # Create a custom legend entry for each ISBN
-    legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=isbn_to_info[isbn], markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
+    legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=book_label, markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
 
 plt.legend(handles=legend_elements, title='Books', bbox_to_anchor=(1.05, 1), loc='upper left')
 
@@ -153,3 +134,4 @@ plt.axis('off')
 
 # Save the plot as a PNG file
 plt.savefig("umap.png", dpi=300, bbox_inches='tight')
+

@@ -12,30 +12,15 @@ import textwrap
 
 print("- ✅ Loaded libraries")
 
-# Function to fetch book titles using Google Books API
-def get_book_title(isbn):
-    api_key = os.environ.get('GOOGLE_API_KEY')
-    url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}&key={api_key}"
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        return "Title Not Found"
-
-    data = response.json()
-    if "items" in data:
-        try:
-            title = data["items"][0]["volumeInfo"]["title"]
-            return title
-        except (IndexError, KeyError):
-            return "Title Not Found"
-    else:
-        return "Title Not Found"
-
 # Load data from embeddings.json
 with open("embeddings.json", "r") as file:
     data = json.load(file)
 
 print("- ✅ Data loaded from 'embeddings.json'")
+
+# Load cached book data
+with open("books_cache.json", "r") as file:
+    cached_data = json.load(file)
 
 embeddings = np.array(data["embeddings"])
 sentences = data["sentences"]
@@ -46,9 +31,9 @@ umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit
 
 print("- ✅ Created UMAP")
 
-# Get unique ISBNs and their corresponding titles
+# Use cached data for titles
+isbn_to_title = {isbn: cached_data[isbn]["title"] if isbn in cached_data else "Title Not Found" for isbn in isbns}
 unique_isbns = list(set(isbns))
-isbn_to_title = {isbn: get_book_title(isbn) for isbn in unique_isbns}
 colors = px.colors.qualitative.Plotly
 
 highlight_ids = {isbn: 0 for isbn in unique_isbns}
@@ -76,7 +61,6 @@ plot_data = pd.DataFrame({
     'isbn': isbns
 })
 
-
 # Create Plotly figure
 fig = go.Figure()
 
@@ -87,8 +71,8 @@ for idx, isbn in enumerate(unique_isbns):
         y=isbn_data['y'],
         mode='markers',
         marker=dict(color=colors[idx % len(colors)], size=10),
-        text=isbn_data['text'],  # Include the wrapped text with URL
-        hoverinfo='text',       # Only show the text on hover
+        text=isbn_data['text'],
+        hoverinfo='text',
         name=isbn_to_title[isbn]
     ))
 

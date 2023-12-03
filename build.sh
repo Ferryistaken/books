@@ -11,6 +11,8 @@ print_success() {
 
 echo "Starting build process..."
 
+python3 google-books-data.py
+
 # Downloading data
 curl -L $SHEET_URL -o sheet.csv
 print_success "Data downloaded."
