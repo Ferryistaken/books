@@ -4,6 +4,7 @@ import csv
 import requests
 import json
 import os
+import sys
 
 def fetch_and_cache_books_data(sheet_url, cache_file):
     response = requests.get(sheet_url)
@@ -52,6 +53,7 @@ def get_book_info(isbn, api_key):
             }
     else:
         print("Couldn't Find Book", isbn)
+        sys.exit(1)
         return None
 
 if __name__ == "__main__":
