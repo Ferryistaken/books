@@ -12,6 +12,7 @@
   "dependencies": {
     "@xenova/transformers": "^2.8.0",
     "mathjs": "^12.0.0",
+    "netlify-cli": "^17.10.1",
     "workbox-cli": "^7.0.0"
   }
 }

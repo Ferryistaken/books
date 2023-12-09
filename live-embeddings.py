@@ -31,8 +31,19 @@ umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit
 
 print("- ✅ Created UMAP")
 
+
 # Use cached data for titles
-isbn_to_title = {isbn: cached_data[isbn]["title"] if isbn in cached_data else "Title Not Found" for isbn in isbns}
+isbn_to_title = {}
+for isbn in isbns:
+    isbn = str(isbn)
+    if isbn in cached_data:
+        title = cached_data[isbn]["title"]
+    else:
+        title = "Title Not Found"
+        print(isbn, "not found")
+        print(cached_data)
+    isbn_to_title[isbn] = title
+
 unique_isbns = list(set(isbns))
 colors = px.colors.qualitative.Plotly
 
@@ -73,7 +84,7 @@ for idx, isbn in enumerate(unique_isbns):
         marker=dict(color=colors[idx % len(colors)], size=10),
         text=isbn_data['text'],
         hoverinfo='text',
-        name=isbn_to_title[isbn]
+        name=isbn_to_title[str(isbn)]
     ))
 
 # Update layout
@@ -100,7 +111,7 @@ for idx, isbn in enumerate(unique_isbns):
         marker=dict(color=colors[idx % len(colors)], size=10),
         text=isbn_data['text'],  # Include the wrapped text with URL
         hoverinfo='text',       # Only show the text on hover
-        name=isbn_to_title[isbn]
+        name=isbn_to_title[str(isbn)]
     ))
 
 # Update layout for square plot without legend
