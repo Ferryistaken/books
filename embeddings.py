@@ -57,11 +57,17 @@ df['group_index'] = df.groupby('isbn').cumcount()
 # Extract sentences (highlights/quotes), ISBNs, and group indices
 sentences = df['highlight'].astype(str).tolist()  # Convert highlights to strings
 isbns = df['isbn'].tolist()
+isbns = [str(int(i)) for i in isbns]
 group_indices = df['group_index'].tolist()
+
+#print(isbn_to_info.keys())
+#print([isbn_to_info[isbn] for isbn in isbns])
 
 # Create arrays for titles and authors
 titles = [isbn_to_info[isbn]["title"] if isbn in isbn_to_info else "Title Not Found" for isbn in isbns]
 authors = [', '.join(isbn_to_info[isbn]["authors"]) if isbn in isbn_to_info else "Author Not Found" for isbn in isbns]
+
+print(titles)
 
 print("Encoding data")
 
@@ -135,5 +141,5 @@ plt.grid(False)
 plt.axis('off')
 
 # Save the plot as a PNG file
-plt.savefig("umap.png", dpi=300, bbox_inches='tight')
+# plt.savefig("umap.png", dpi=300, bbox_inches='tight')
 

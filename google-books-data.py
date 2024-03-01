@@ -17,13 +17,16 @@ def fetch_and_cache_books_data(sheet_url, cache_file):
 
     unique_isbns = set()
     for row in csv_reader:
-        unique_isbns.add(row['isbn'])
+        if row['isbn'] == '':
+            continue
+        unique_isbns.add(int(row['isbn']))
 
     api_key = os.environ.get("GOOGLE_API_KEY")
     cache = {}
 
     google_calls = 0
     for isbn in unique_isbns:
+        print(isbn)
         book_data = get_book_info(isbn, api_key)
         google_calls += 1
         if book_data:

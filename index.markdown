@@ -53,3 +53,7 @@ layout: default
     </div>
   {% endfor %}
 </div>
+
+<div style="text-align: center; margin-top: 20px;">
+    <a href="/other" class="other-quotes-link">Other Quotes</a>
+</div>
