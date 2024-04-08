@@ -32,12 +32,26 @@ layout: default
 {% assign count = site.books | size %}
 
 {% assign total_highlights = 0 %}
+{% assign total_pages = 0 %}
 {% for book in site.books %}
   {% assign highlights_count = book.highlights | size %}
   {% assign total_highlights = total_highlights | plus: highlights_count %}
+  {% assign total_pages = total_pages | plus: book.page_number %}
 {% endfor %}
 
-[How I made this](https://alessandroferrari.live/book-highlights) \| 📖 Total Books: {{count}} \| 💡 Total Highlights: {{total_highlights}}
+{% assign start_date = '2004-05-12' | date: '%s' %}
+{% assign today = 'now' | date: '%s' %}
+{% assign secondsSince = today | minus: start_date %}
+{% assign daysSince = secondsSince | divided_by: 86400 %}
+
+{% if daysSince > 0 %}
+  {% assign pages_per_day = total_pages | divided_by: daysSince | round: 1 %}
+{% else %}
+  {% assign pages_per_day = 0 %}
+{% endif %}
+
+[How I made this](https://alessandroferrari.live/book-highlights) \| 📖 Books: {{count}} \| 💡 Total Highlights: {{total_highlights}} \| 📚 Pages per Day (lifetime): {{pages_per_day}}
+
 
 <div style="text-align: center; margin: 0; overflow: hidden;">
 <iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0;"></iframe>

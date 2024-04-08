@@ -52,6 +52,7 @@ def get_book_info(isbn, api_key):
                 "authors": book_info.get("authors", ["Unknown Author"]),
                 "publisher": book_info.get("publisher", "Unknown Publisher"),
                 "publishedDate": book_info.get("publishedDate", "Unknown Date"),
+                "pageCount": book_info.get("pageCount", 250),
                 "coverImage": cover_image_url
             }
     else:

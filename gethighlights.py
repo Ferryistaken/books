@@ -76,6 +76,7 @@ for row in csv_reader:
 for isbn, book in books.items():
     first_author = book['authors'][0].split()
     first_author_last_name = first_author[-1] if first_author else "Unknown"
+    print(book)
 
     with open(os.path.join(collection_dir, f"{isbn}.md"), 'w', encoding='utf-8') as file:
         file.write('---\n')
@@ -85,6 +86,7 @@ for isbn, book in books.items():
         file.write(f"first-author-last-name: \"{first_author_last_name}\"\n")
         file.write(f"publisher: \"{book['publisher']}\"\n")
         file.write(f"publishedDate: \"{book['publishedDate']}\"\n")
+        file.write(f"page_number: \"{book['pageCount']}\"\n")
         file.write(f"coverImage: \"{book.get('coverImage', '')}\"\n")
         non_empty_highlights = [h for h in book['highlights'] if h.strip()]
         if non_empty_highlights:
