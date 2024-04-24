@@ -10,3 +10,6 @@
 - title: home
   url: https://alessandroferrari.live/
   external: false
+- title: artifact
+  url: /artifact
+  external: false
