@@ -60,8 +60,8 @@ urls = [generate_url(isbn) for isbn in isbns]
 
 # Wrap text for each highlight and append URL
 wrapped_sentences_with_url = [
-    '<br>'.join(textwrap.wrap(str(sentence), width=80)) + f"<br>URL: {url}" 
-    for sentence, url in zip(sentences, urls)
+    f"<b><i>{isbn_to_title[str(isbn)].upper()}</i></b><br><br>" + '<br>'.join(textwrap.wrap(str(sentence), width=80))
+    for sentence, url, isbn in zip(sentences, urls, isbns)
 ]
 
 # Prepare Plotly data
