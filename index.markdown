@@ -45,7 +45,8 @@ layout: default
 {% assign daysSince = secondsSince | divided_by: 86400 %}
 
 {% if daysSince > 0 %}
-  {% assign pages_per_day = total_pages | divided_by: daysSince | round: 1 %}
+  {% assign pages_per_day_raw = total_pages | times: 1.0 | divided_by: daysSince %}
+  {% assign pages_per_day = pages_per_day_raw | times: 100.0 | round: 0 | divided_by: 100.0 %}
 {% else %}
   {% assign pages_per_day = 0 %}
 {% endif %}

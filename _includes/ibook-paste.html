@@ -1,34 +1,40 @@
 <textarea id="ibook-text" rows="10" cols="50" placeholder="Paste iBook highlights here"></textarea><br>
 <button class="button-style" role="button" onclick="convertToCSV()">Convert to CSV</button>
 
-
 <script>
-    function convertToCSV() {
-    const text = document.getElementById('ibook-text').value;
-    if (!text) {
-        alert('Please paste the iBook text into the textarea.');
-        return;
+    function extractQuotesToCSV(text) {
+        const blocks = text.split(/\d{1,2} \w+ \d{4}/).filter(Boolean);
+
+        let csvContent = "Quote\n";
+
+        blocks.forEach(block => {
+            let quote = block.match(/“[^”]*”/g);
+            if (quote) {
+                quote = quote.join(" ").replace(/\n/g, " ").replace(/"/g, '""').trim();
+                csvContent += `"${quote}"\n`;
+            }
+        });
+
+        return csvContent;
     }
 
-    const blocks = text.split('Excerpt from:\n');
+    function convertToCSV() {
+        const textareaContent = document.getElementById('ibook-text').value;
+        const csvOutput = extractQuotesToCSV(textareaContent);
+        
+        downloadCSV(csvOutput);
+    }
 
-    blocks.shift();
+    function downloadCSV(csvContent) {
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "quotes.csv";
+        link.style.visibility = 'hidden';
 
-    const highlights = blocks.map(block => {
-        const lines = block.split('\n').map(line => line.trim()).filter(line => line !== '');
-        lines.splice(0, 3);
-        return lines.join(' ');
-    });
-
-    const csvContent = highlights.map(highlight => `"${highlight.replace(/"/g, '""').trim()}"`).join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', 'ibook_highlights.csv');
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 </script>
+
