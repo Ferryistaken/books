@@ -59,6 +59,7 @@ for row in csv_reader:
                 "authors": ["Unknown Author"],
                 "publisher": "Unknown Publisher",
                 "publishedDate": "Unknown Date",
+                "pageCount":0,
                 "coverImage": ""
             })
             books[isbn] = book_info
@@ -78,8 +79,6 @@ for isbn, book in books.items():
     first_author_last_name = first_author[-1] if first_author else "Unknown"
     print(book)
 
-    if title == 'Unknown Title':
-        continue
     with open(os.path.join(collection_dir, f"{isbn}.md"), 'w', encoding='utf-8') as file:
         file.write('---\n')
         file.write('layout: post\n')
