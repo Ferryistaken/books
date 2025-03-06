@@ -47,14 +47,11 @@ def is_number(s):
 
 # Process each row in the CSV
 for row in csv_reader:
-    isbn_raw = row['isbn']
+    isbn = row['isbn']
     highlight = row['highlight']
 
     # Check if ISBN is a number
-    if is_number(isbn_raw):
-        # Normalize ISBN by converting to int then back to string (removes leading zeros)
-        isbn = str(int(isbn_raw))
-        
+    if is_number(isbn):
         # Handle rows with ISBN
         if isbn not in books:
             book_info = cache.get(isbn, {
@@ -70,11 +67,10 @@ for row in csv_reader:
         books[isbn]['highlights'].append(highlight)
     else:
         # Handle non-ISBN sources
-        source = isbn_raw.strip() if isbn_raw.strip() else "Unknown Source"
+        source = isbn if isbn.strip() else "Unknown Source"
         if source not in non_isbn_sources:
             non_isbn_sources[source] = []
         non_isbn_sources[source].append(highlight)
-
 
 # Write information for each book to separate markdown files
 for isbn, book in books.items():
