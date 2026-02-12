@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: books-home
 ---
 
 # My Book Highlights
