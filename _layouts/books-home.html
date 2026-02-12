@@ -150,6 +150,18 @@
         font-style: italic;
         font-size: 12px;
       }
+
+      /* Ensure grid styling works */
+      .lazyload,
+      .blur-up {
+        opacity: 0;
+        transition: opacity 400ms;
+      }
+
+      .lazyload.loaded,
+      .blur-up.loaded {
+        opacity: 1;
+      }
     </style>
   </head>
   <body>
