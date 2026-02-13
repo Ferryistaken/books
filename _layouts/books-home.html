@@ -1,184 +1,99 @@
+---
+layout: compress
+---
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width">
-    <meta charset="UTF-8">
-    {% if site.google_analytics and jekyll.environment == 'production' %}
-    {% include analytics.html %}
-    {% endif %}
-    <title>{{ site.title }}</title>
-    <style>
+<html lang="{{ page.lang | default: site.lang | default: " en " }}">
+{% include header.html %}
+
+<body data-theme="{{ site.mode }}">
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
 
-      html {
-        cursor: none;
-      }
+    html {
+      cursor: none;
+    }
 
-      body {
-        margin-top: 120px;
-        margin-left: 80px;
-        margin-right: 80px;
-        background: #fe793d;
-        color: #fef1eb;
-        font-family: 'Fira Code', monospace;
-        padding: 20px;
-        font-size: 16px;
-        line-height: 1.6em;
-      }
+    body {
+      background: #fe793d !important;
+      color: #fef1eb !important;
+      font-family: 'Fira Code', monospace !important;
+    }
 
-      div {
-        margin-bottom: 20px;
-      }
+    a:link {
+      color: #fef1eb !important;
+    }
 
-      a:link {
-        color: #fef1eb;
-        background-color: transparent;
-        text-decoration: underline;
-      }
+    a:visited {
+      color: #fee4d8 !important;
+    }
 
-      a:visited {
-        color: #fee4d8;
-        background-color: transparent;
-        text-decoration: underline;
-      }
+    h1, h2, h3 {
+      color: white !important;
+    }
 
-      ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-      }
+    .wrapper {
+      background: transparent !important;
+    }
 
-      ul li {
-        padding-left: 20px;
-        position: relative;
-      }
+    .navbar, .footer {
+      background: transparent !important;
+      color: #fef1eb !important;
+    }
 
-      ul li::before {
-        content: '–';
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
+    .navbar a, .footer a {
+      color: #fef1eb !important;
+    }
 
+    #invertedcursor {
+      position: fixed;
+      width: 25px;
+      height: 25px;
+      background: #fff;
+      border-radius: 50%;
+      top: var(--y, 0);
+      left: var(--x, 0);
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform .2s;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
       #invertedcursor {
-        position: absolute;
-        width: 25px;
-        height: 25px;
-        background: #fff;
-        border-radius: 50%;
-        top: var(--y, 0);
-        left: var(--x, 0);
-        transform: translate(-50%, -50%);
-        z-index: 2;
-        mix-blend-mode: difference;
-        transition: transform .2s;
-        pointer-events: none;
+        display: none;
       }
 
-      h1, h2 {
-        color: white;
+      html {
+        cursor: auto;
       }
+    }
 
-      @media (max-width: 768px) {
-        #invertedcursor {
-          display: none;
-        }
+    /* Book grid styling */
+    .book-image {
+      border: 2px solid #fef1eb;
+    }
 
-        html {
-          cursor: auto;
-          overflow-x: hidden;
-          margin-right: 0;
-          padding: 0;
-        }
+    .book-title a {
+      color: white !important;
+      font-weight: bold;
+    }
 
-        body {
-          margin-top: 120px;
-          margin-left: 3px;
-          margin-right: 0px;
-          padding: 0;
-          background: #fe793d;
-          color: #fef1eb;
-          font-family: 'Fira Code', monospace;
-          padding: 20px;
-          font-size: 18px;
-          line-height: 1.6em;
-        }
-      }
+    iframe {
+      border: 2px solid #fef1eb;
+    }
+  </style>
 
-      /* Book grid styling */
-      .book-container {
-        border: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+  <div id="invertedcursor"></div>
 
-      .book-image {
-        max-width: 100%;
-        border: 2px solid #fef1eb;
-      }
+  {% include navbar.html %}
+  <div class="wrapper">
+    <main aria-label="Content">
+      {{ content }}
+    </main>
+    {% include footer.html %}
+  </div>
 
-      .book-title {
-        text-align: center;
-        margin-top: 10px;
-        font-size: 14px;
-      }
-
-      .book-title a {
-        color: white;
-        font-weight: bold;
-      }
-
-      .book-author {
-        margin-top: auto;
-        font-size: 12px;
-        text-align: center;
-        opacity: 0.8;
-      }
-
-      .other-quotes-link {
-        color: white;
-        font-weight: bold;
-        text-decoration: underline;
-      }
-
-      iframe {
-        border: 2px solid #fef1eb;
-      }
-
-      #copyright {
-        font-style: italic;
-        font-size: 12px;
-      }
-
-      /* Ensure grid styling works */
-      .lazyload,
-      .blur-up {
-        opacity: 0;
-        transition: opacity 400ms;
-      }
-
-      .lazyload.loaded,
-      .blur-up.loaded {
-        opacity: 1;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="invertedcursor"></div>
-
-    <div style="margin-bottom: 40px;">
-      <h1 style="font-size: 48px; margin-bottom: 10px;">📚 {{ site.title }}</h1>
-      <p><a href="https://alessandroferrari.live">← back to main site</a></p>
-    </div>
-
-    {{ content }}
-
-    <div style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #fef1eb;">
-      <span id="copyright">© {{ "now" | date: "%Y" }} Alessandro Ferrari</span>
-    </div>
-
-  </body>
   <script>
     // custom inverted cursor
     document.addEventListener('mousemove', function(e) {
@@ -186,4 +101,5 @@
       document.documentElement.style.setProperty('--y', (e.clientY + window.scrollY) + 'px');
     });
   </script>
+</body>
 </html>
