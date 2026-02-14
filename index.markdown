@@ -61,11 +61,13 @@ layout: books-home
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
   {% assign sorted_books = site.books | sort: 'first-author-last-name' %}
   {% for book in sorted_books %}
-    <div class="book-container">
-      <a href="{{ book.url | relative_url }}">{% include lazyload.html image_src=book.coverImage image_alt=book.title image_title=book.title %}</a>
-      <h2 class="book-title"><a href="{{ book.url | relative_url }}">{{ book.title }}</a></h2>
-      <p class="book-author">{{ book.authors | join: ', ' }}</p>
-    </div>
+    <a href="{{ book.url | relative_url }}" style="text-decoration: none; color: inherit;">
+      <div class="book-container">
+        {% include lazyload.html image_src=book.coverImage image_alt=book.title image_title=book.title %}
+        <h2 class="book-title">{{ book.title }}</h2>
+        <p class="book-author">{{ book.authors | join: ', ' }}</p>
+      </div>
+    </a>
   {% endfor %}
 </div>
 

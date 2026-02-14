@@ -154,17 +154,38 @@ layout: compress
     }
 
     .highlight-text {
-      background-color: rgba(43, 94, 73, 0.15);
-      padding: 0.2rem 0.4rem;
-      border-left: 3px solid #2b5e49;
-      display: inline-block;
-      padding-left: 1rem;
-      margin: 0.5rem 0;
+      display: block;
+      padding: 1.25rem 1.75rem;
+      margin: 1.5rem 0;
+      background: rgba(43, 94, 73, 0.03);
+      border-left: 4px solid #2b5e49;
+      border-radius: 0 4px 4px 0;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      font-style: italic;
+      color: #1a1a1a;
+      position: relative;
+    }
+
+    .highlight-text::before {
+      content: '"';
+      position: absolute;
+      left: 0.5rem;
+      top: 0.5rem;
+      font-size: 2.5rem;
+      color: rgba(43, 94, 73, 0.2);
+      font-family: Georgia, serif;
+      line-height: 1;
     }
 
     body[data-theme="dark"] .highlight-text {
-      background-color: rgba(95, 184, 148, 0.15);
+      background: rgba(95, 184, 148, 0.05);
       border-left-color: #5fb894;
+      color: #e0e0e0;
+    }
+
+    body[data-theme="dark"] .highlight-text::before {
+      color: rgba(95, 184, 148, 0.2);
     }
 
     .highlight-attribution {
