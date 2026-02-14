@@ -117,8 +117,8 @@ for idx, isbn in enumerate(unique_isbns):
 # Update layout for square plot without legend
 squareFig.update_layout(
     title='',
-    plot_bgcolor='#FAF8F5',  # Cream background to match site theme
-    paper_bgcolor='#FAF8F5',  # Match outer background
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent to inherit page background
+    paper_bgcolor='rgba(0,0,0,0)',  # Transparent outer background
     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, fixedrange=True),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, fixedrange=True),
     showlegend=False,  # Disable the legend
