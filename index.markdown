@@ -2,7 +2,7 @@
 layout: books-home
 ---
 
-# My Book Highlights
+<h1 style="font-size: clamp(4rem, 10vw, 10rem); font-weight: 700; text-align: center; letter-spacing: -0.03em; line-height: 1.05; font-family: 'Instrument Serif', Georgia, serif;">My Book Highlights</h1>
 
 ---
 

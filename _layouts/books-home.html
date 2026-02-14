@@ -19,17 +19,22 @@ layout: compress
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Instrument Serif', Georgia, serif !important;
       color: #1a1a1a !important;
-      font-weight: 400;
       line-height: 1.2;
     }
 
+    body[data-theme="light"] main h1,
+    body[data-theme="dark"] main h1,
+    body main h1,
+    main h1,
     h1 {
+      font-family: 'Instrument Serif', Georgia, serif !important;
       font-size: clamp(4rem, 10vw, 10rem) !important;
-      margin-bottom: 1.5rem;
-      text-align: center;
+      margin-bottom: 1.5rem !important;
+      text-align: center !important;
       font-weight: 700 !important;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      max-width: 100% !important;
     }
 
     h2 {
