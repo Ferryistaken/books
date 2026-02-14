@@ -7,84 +7,122 @@ layout: compress
 
 <body data-theme="{{ site.mode }}">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
-
-    html {
-      cursor: none;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 
     body {
-      background: #fe793d !important;
-      color: #fef1eb !important;
-      font-family: 'Fira Code', monospace !important;
+      background: #FAF8F5 !important;
+      color: #2c2c2c !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Instrument Serif', Georgia, serif !important;
+      color: #1a1a1a !important;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: 3rem !important;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      font-size: 2rem !important;
+      margin-bottom: 1rem;
     }
 
     a:link {
-      color: #fef1eb !important;
+      color: #2b5e49 !important;
+      text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     a:visited {
-      color: #fee4d8 !important;
+      color: #1d4234 !important;
     }
 
-    h1, h2, h3 {
-      color: white !important;
+    a:hover {
+      color: #1a3729 !important;
+      text-decoration: underline;
     }
 
     .wrapper {
       background: transparent !important;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
     }
 
     .navbar, .footer {
-      background: transparent !important;
-      color: #fef1eb !important;
+      background: rgba(51, 51, 52, 0.02) !important;
+      color: #2c2c2c !important;
+      border-bottom: 1px solid rgba(51, 51, 52, 0.1);
+    }
+
+    .footer {
+      border-top: 1px solid rgba(51, 51, 52, 0.1);
+      border-bottom: none;
+      margin-top: 3rem;
     }
 
     .navbar a, .footer a {
-      color: #fef1eb !important;
-    }
-
-    #invertedcursor {
-      position: fixed;
-      width: 25px;
-      height: 25px;
-      background: #fff;
-      border-radius: 50%;
-      top: var(--y, 0);
-      left: var(--x, 0);
-      transform: translate(-50%, -50%);
-      z-index: 9999;
-      mix-blend-mode: difference;
-      transition: transform .2s;
-      pointer-events: none;
-    }
-
-    @media (max-width: 768px) {
-      #invertedcursor {
-        display: none;
-      }
-
-      html {
-        cursor: auto;
-      }
+      color: #2c2c2c !important;
     }
 
     /* Book grid styling */
+    .book-container {
+      background: white;
+      border: 1px solid rgba(51, 51, 52, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    .book-container:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
     .book-image {
-      border: 2px solid #fef1eb;
+      border: 1px solid rgba(51, 51, 52, 0.15);
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .book-title {
+      font-family: 'Instrument Serif', Georgia, serif !important;
+      font-size: 1.1rem;
+      margin-top: 1rem;
     }
 
     .book-title a {
-      color: white !important;
-      font-weight: bold;
+      color: #1a1a1a !important;
+      font-weight: 500;
+    }
+
+    .book-author {
+      color: #666 !important;
+      font-size: 0.9rem;
     }
 
     iframe {
-      border: 2px solid #fef1eb;
+      border: 1px solid rgba(51, 51, 52, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Stats section styling */
+    main > p:first-of-type {
+      background: rgba(43, 94, 73, 0.05);
+      border-left: 4px solid #2b5e49;
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
     }
   </style>
-
-  <div id="invertedcursor"></div>
 
   {% include navbar.html %}
   <div class="wrapper">
@@ -94,12 +132,5 @@ layout: compress
     {% include footer.html %}
   </div>
 
-  <script>
-    // custom inverted cursor
-    document.addEventListener('mousemove', function(e) {
-      document.documentElement.style.setProperty('--x', (e.clientX + window.scrollX) + 'px');
-      document.documentElement.style.setProperty('--y', (e.clientY + window.scrollY) + 'px');
-    });
-  </script>
 </body>
 </html>
