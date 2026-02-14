@@ -111,11 +111,11 @@ layout: compress
     }
 
     .book-container {
-      background: white;
-      border: 1px solid rgba(51, 51, 52, 0.1);
-      border-radius: 8px;
-      padding: 1rem;
-      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      transition: transform 0.2s ease, opacity 0.2s ease;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -135,8 +135,8 @@ layout: compress
     }
 
     .book-container:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      opacity: 0.85;
     }
 
     .book-title {
@@ -168,9 +168,12 @@ layout: compress
     }
 
     .book-image {
-      border: 1px solid rgba(51, 51, 52, 0.15);
       border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    body[data-theme="dark"] .book-image {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .book-title {
@@ -255,8 +258,8 @@ layout: compress
     }
 
     body[data-theme="dark"] .book-container {
-      background: #242424;
-      border-color: rgba(255, 255, 255, 0.1);
+      background: transparent;
+      border: none;
     }
 
     body[data-theme="dark"] .book-image {
