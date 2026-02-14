@@ -119,8 +119,8 @@ squareFig.update_layout(
     title='',
     plot_bgcolor='#FAF8F5',  # Cream background to match site theme
     paper_bgcolor='#FAF8F5',  # Match outer background
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, fixedrange=True),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, fixedrange=True),
     showlegend=False,  # Disable the legend
     autosize=False,    # Disable autosizing
     width=450,         # Width of the plot
@@ -134,7 +134,12 @@ squareFig.update_layout(
     )
 )
 
-# Save the squareFigure as an HTML file with a new name
-squareFig.write_html("square-plot.html")
+# Save the squareFigure as an HTML file with a new name and configure to prevent scrollbars
+config = {
+    'displayModeBar': False,  # Hide the mode bar
+    'scrollZoom': False,      # Disable scroll zoom
+    'staticPlot': False       # Keep interactive (hover) but no zoom/pan
+}
+squareFig.write_html("square-plot.html", config=config)
 
 print("- ✅ Plotted Second Figure")

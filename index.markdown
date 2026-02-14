@@ -2,7 +2,7 @@
 layout: books-home
 ---
 
-<h1 style="font-size: clamp(4rem, 10vw, 10rem); font-weight: 700; text-align: center; letter-spacing: -0.03em; line-height: 1.05; font-family: 'Instrument Serif', Georgia, serif;">My Book Highlights</h1>
+<h1 style="font-size: clamp(4rem, 10vw, 10rem); font-weight: 400; text-align: left; letter-spacing: -0.03em; line-height: 1.05; font-family: 'Instrument Serif', Georgia, serif;">My Book Highlights</h1>
 
 ---
 
@@ -55,7 +55,7 @@ layout: books-home
 
 
 <div style="text-align: center; margin: 0; overflow: hidden;">
-<iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0;"></iframe>
+<iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0; overflow: hidden;" scrolling="no"></iframe>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
