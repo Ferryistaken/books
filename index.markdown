@@ -66,7 +66,7 @@ layout: books-home
 <iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0; overflow: hidden;" scrolling="no"></iframe>
 </div>
 
-<div class="book-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+<div class="book-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem;">
   {% assign sorted_books = site.books | sort: 'first-author-last-name' %}
   {% for book in sorted_books %}
     {% comment %} Insert quote every 7 books {% endcomment %}
