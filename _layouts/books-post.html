@@ -1,0 +1,288 @@
+---
+layout: compress
+---
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: " en " }}">
+{% include header.html %}
+
+<body data-theme="{{ site.mode }}">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #FAF8F5 !important;
+      color: #2c2c2c !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      line-height: 1.8;
+    }
+
+    body[data-theme="dark"] {
+      background: #1a1a1a !important;
+      color: #e0e0e0 !important;
+    }
+
+    body[data-theme="dark"] .navbar,
+    body[data-theme="dark"] .footer {
+      background: transparent !important;
+      background-color: transparent !important;
+      border: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+    }
+
+    body[data-theme="dark"] .navbar .menu {
+      background: transparent !important;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Instrument Serif', Georgia, serif !important;
+      color: #1a1a1a !important;
+      font-weight: 400;
+    }
+
+    body[data-theme="dark"] h1,
+    body[data-theme="dark"] h2,
+    body[data-theme="dark"] h3 {
+      color: #f5f5f5 !important;
+    }
+
+    h2 {
+      font-size: 2.5rem !important;
+      text-align: center;
+      margin: 2rem 0 1rem;
+      font-weight: 500 !important;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-size: 1.8rem !important;
+      text-align: center;
+      margin: 2rem 0 1.5rem;
+      font-weight: 500 !important;
+    }
+
+    a {
+      color: #2b5e49 !important;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    body[data-theme="dark"] a {
+      color: #5fb894 !important;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .wrapper {
+      background: transparent !important;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .navbar, .footer {
+      background: transparent !important;
+      background-color: transparent !important;
+      color: #2c2c2c !important;
+      border: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+      padding-top: 1rem !important;
+      padding-bottom: 0.5rem !important;
+    }
+
+    .navbar .menu {
+      background: transparent !important;
+    }
+
+    .footer {
+      margin-top: 3rem;
+    }
+
+    .navbar a, .footer a {
+      color: #2c2c2c !important;
+    }
+
+    body[data-theme="dark"] .navbar a,
+    body[data-theme="dark"] .footer a {
+      color: #e0e0e0 !important;
+    }
+
+    .book-cover {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .book-cover img {
+      border: 1px solid rgba(51, 51, 52, 0.15);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 300px;
+    }
+
+    body[data-theme="dark"] .book-cover img {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .book-meta {
+      text-align: center;
+      color: #666;
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+    }
+
+    body[data-theme="dark"] .book-meta {
+      color: #999;
+    }
+
+    .highlights-list {
+      list-style-type: none;
+      padding: 0;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .highlights-list li {
+      font-size: 1.15rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+
+    .highlight-text {
+      display: block;
+      padding: 1.5rem 0;
+      margin: 2rem 0;
+      border-left: 3px solid #2b5e49;
+      padding-left: 2rem;
+      font-size: 1.15rem;
+      line-height: 1.75;
+      font-style: normal;
+      color: #1a1a1a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 400;
+      letter-spacing: -0.011em;
+    }
+
+    body[data-theme="dark"] .highlight-text {
+      border-left-color: #5fb894;
+      color: #e0e0e0;
+    }
+
+    .highlight-attribution {
+      color: #888;
+      font-style: normal;
+      margin-top: 1rem;
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 400;
+      opacity: 0.8;
+    }
+
+    body[data-theme="dark"] .highlight-attribution {
+      color: #999;
+      opacity: 0.7;
+    }
+
+    .svg-icon {
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+      margin-left: 0.5rem;
+    }
+
+    .svg-icon:hover {
+      opacity: 1;
+    }
+
+    .svg-icon.clicked {
+      opacity: 1;
+      fill: #2b5e49;
+    }
+
+    body[data-theme="dark"] .svg-icon {
+      stroke: #e0e0e0 !important;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 3rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(43, 94, 73, 0.1);
+      border: 1px solid #2b5e49;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    body[data-theme="dark"] .back-link {
+      background: rgba(95, 184, 148, 0.1);
+      border-color: #5fb894;
+    }
+
+    .back-link:hover {
+      background: rgba(43, 94, 73, 0.15);
+      text-decoration: none;
+    }
+
+    body[data-theme="dark"] .back-link:hover {
+      background: rgba(95, 184, 148, 0.15);
+    }
+  </style>
+
+  {% include navbar.html %}
+  <div class="wrapper">
+    <main aria-label="Content">
+      <div class="book-cover">
+        {% include lazyload.html image_src=page.coverImage image_alt=page.title image_title=page.title %}
+      </div>
+
+      <h2>{{ page.title }}</h2>
+      <p class="book-meta">{{ page.authors | join: ", " }}<br>{{ page.publishedDate | split: '-' | first }}</p>
+
+      {% if page.highlights.size > 0 %}
+        <h3>Highlights</h3>
+        <ul class="highlights-list">
+          {% for highlight in page.highlights %}
+          <li id="{{ forloop.index0 }}">
+            <div class="highlight-text">{{ highlight }}</div>
+            <span class="highlight-attribution">
+              —{{ page.title }} by {{ page.authors | join: ", " }}
+              <svg class="svg-icon" onclick="copyToClipboard('{{ forloop.index0 }}', this)" transform="translate(0,4)" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p style="text-align: center; color: #666; margin: 3rem 0;"><em>No highlights are present for this book.</em></p>
+      {% endif %}
+
+      <div style="text-align: center;">
+        <a href="/" class="back-link">← Back to Books</a>
+      </div>
+    </main>
+    {% include footer.html %}
+  </div>
+
+  <script>
+    function copyToClipboard(elementId, element) {
+      var url = window.location.href.split('#')[0] + '#' + elementId;
+      navigator.clipboard.writeText(url).then(function() {
+        element.classList.add("clicked");
+        setTimeout(function() {
+          element.classList.remove("clicked");
+        }, 100);
+      }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -117,15 +117,16 @@ for idx, isbn in enumerate(unique_isbns):
 # Update layout for square plot without legend
 squareFig.update_layout(
     title='',
-    plot_bgcolor='white',
-    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent to inherit page background
+    paper_bgcolor='rgba(0,0,0,0)',  # Transparent outer background
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, fixedrange=True),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, fixedrange=True),
     showlegend=False,  # Disable the legend
     autosize=False,    # Disable autosizing
-    width=350,         # Width of the plot
-    height=350,         # Height of the plot (same as width for square)
-    margin=dict(       # Adjust margins to fit in an iframe without scrollbars
-        l=100,           # Left margin
+    width=450,         # Width of the plot
+    height=450,        # Height of the plot (same as width for square)
+    margin=dict(       # Minimal margins for cleaner look
+        l=0,           # Left margin
         r=0,           # Right margin
         b=0,           # Bottom margin
         t=0,           # Top margin
@@ -133,7 +134,12 @@ squareFig.update_layout(
     )
 )
 
-# Save the squareFigure as an HTML file with a new name
-squareFig.write_html("square-plot.html")
+# Save the squareFigure as an HTML file with a new name and configure to prevent scrollbars
+config = {
+    'displayModeBar': False,  # Hide the mode bar
+    'scrollZoom': False,      # Disable scroll zoom
+    'staticPlot': False       # Keep interactive (hover) but no zoom/pan
+}
+squareFig.write_html("square-plot.html", config=config)
 
 print("- ✅ Plotted Second Figure")

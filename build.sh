@@ -29,6 +29,10 @@ print_success "live-embeddings.py executed."
 python3 gethighlights.py
 print_success "gethighlights.py executed."
 
+# Installing Jekyll dependencies
+bundle install
+print_success "Bundle install completed."
+
 # Building with Jekyll
 bundle exec jekyll build
 workbox generateSW workbox-config.js

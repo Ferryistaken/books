@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: books-page
 title: Vector Space
 ---
 

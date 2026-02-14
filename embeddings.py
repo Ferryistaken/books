@@ -27,10 +27,15 @@ df = pd.read_csv('sheet.csv')
 with open("books_cache.json", "r") as file:
     isbn_to_info = json.load(file)
 
+# Drop rows where highlight is NaN or empty
+df = df.dropna(subset=['highlight'])
 df['highlight'] = df['highlight'].astype(str).str.strip()
+df = df[df['highlight'] != '']
+df = df[df['highlight'].str.lower() != 'nan']
 
-# Remove rows with NaN or empty strings in 'highlight'
-df = df[(df['highlight'].str.lower() != 'nan') & (df['highlight'] != '')]
+# Drop rows where ISBN is NaN or empty
+df = df.dropna(subset=['isbn'])
+df = df[df['isbn'].astype(str).str.strip() != '']
 
 # If there are no valid rows left, exit the script
 if df.empty:
@@ -57,7 +62,8 @@ df['group_index'] = df.groupby('isbn').cumcount()
 # Extract sentences (highlights/quotes), ISBNs, and group indices
 sentences = df['highlight'].astype(str).tolist()  # Convert highlights to strings
 isbns = df['isbn'].tolist()
-isbns = [str(int(i)) for i in isbns]
+# Handle ISBNs more carefully to avoid conversion errors
+isbns = [str(int(float(i))) if pd.notna(i) else "0" for i in isbns]
 group_indices = df['group_index'].tolist()
 
 #print(isbn_to_info.keys())
@@ -70,12 +76,24 @@ authors = [', '.join(isbn_to_info[isbn]["authors"]) if isbn in isbn_to_info else
 print(titles)
 
 print("Encoding data")
+print(f"Number of sentences to encode: {len(sentences)}")
+print(f"Sample sentences: {sentences[:3]}")
+
+# Ensure all sentences are strings and not empty
+sentences = [str(s).strip() for s in sentences if s and str(s).strip() and str(s).lower() != 'nan']
+
+if not sentences:
+    print("No valid sentences to encode after cleaning")
+    exit(1)
 
 # Generate embeddings
 try:
     embeddings = model.encode(sentences, normalize_embeddings=True)
 except Exception as e:
     print(f"Error during encoding: {e}")
+    print(f"Problematic sentences types: {[type(s) for s in sentences[:5]]}")
+    import traceback
+    traceback.print_exc()
     exit(1)
 
 # Convert embeddings to list for JSON compatibility and save to JSON

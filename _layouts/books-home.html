@@ -1,0 +1,252 @@
+---
+layout: compress
+---
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: " en " }}">
+{% include header.html %}
+
+<body data-theme="{{ site.mode }}">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #FAF8F5 !important;
+      color: #2c2c2c !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      line-height: 1.6;
+    }
+
+    .book-grid {
+      scroll-snap-type: y proximity;
+    }
+
+    .book-grid > a {
+      scroll-snap-align: start;
+      scroll-margin-top: 2rem;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Instrument Serif', Georgia, serif !important;
+      color: #1a1a1a !important;
+      line-height: 1.2;
+    }
+
+    body[data-theme="light"] main h1,
+    body[data-theme="dark"] main h1,
+    body main h1,
+    main h1,
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif !important;
+      font-size: clamp(4rem, 10vw, 10rem) !important;
+      margin-bottom: 1.5rem !important;
+      text-align: left !important;
+      font-weight: 400 !important;
+      line-height: 1.05 !important;
+      letter-spacing: -0.03em !important;
+      max-width: 100% !important;
+    }
+
+    h2 {
+      font-size: 2rem !important;
+      margin-bottom: 1rem;
+    }
+
+    main > h1:first-child {
+      margin-top: 2rem;
+    }
+
+    a:link {
+      color: #2b5e49 !important;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:visited {
+      color: #1d4234 !important;
+    }
+
+    a:hover {
+      color: #1a3729 !important;
+      text-decoration: underline;
+    }
+
+    .wrapper {
+      background: transparent !important;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .navbar, .footer {
+      background: transparent !important;
+      background-color: transparent !important;
+      color: #2c2c2c !important;
+      border: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+      padding-top: 1rem !important;
+      padding-bottom: 0.5rem !important;
+    }
+
+    .navbar .menu {
+      background: transparent !important;
+    }
+
+    .footer {
+      margin-top: 3rem;
+    }
+
+    .navbar a, .footer a {
+      color: #2c2c2c !important;
+    }
+
+    /* Book grid styling */
+    .book-container {
+      background: white;
+      border: 1px solid rgba(51, 51, 52, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    a:has(.book-container) {
+      text-decoration: none !important;
+    }
+
+    .book-container:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .book-title {
+      color: #1a1a1a !important;
+    }
+
+    body[data-theme="dark"] .book-title {
+      color: #f5f5f5 !important;
+    }
+
+    .book-image {
+      border: 1px solid rgba(51, 51, 52, 0.15);
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .book-title {
+      font-family: 'Instrument Serif', Georgia, serif !important;
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
+
+    .book-title a {
+      color: #1a1a1a !important;
+      font-weight: 500;
+    }
+
+    .book-author {
+      color: #666 !important;
+      font-size: 0.9rem;
+    }
+
+    iframe {
+      border: none !important;
+      border-radius: 8px;
+      box-shadow: none;
+      background: transparent;
+      overflow: hidden !important;
+    }
+
+    /* Center the plot container */
+    main > div[style*="text-align: center"] {
+      margin: 2rem 0;
+    }
+
+    /* Stats section styling */
+    main > p:first-of-type {
+      background: rgba(43, 94, 73, 0.05);
+      border-left: 4px solid #2b5e49;
+      padding: 1rem 1.5rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      margin: 2rem auto;
+      text-align: left;
+      width: fit-content;
+      display: block;
+    }
+
+    body[data-theme="dark"] {
+      background: #1a1a1a !important;
+      color: #e0e0e0 !important;
+    }
+
+    body[data-theme="dark"] h1,
+    body[data-theme="dark"] h2,
+    body[data-theme="dark"] h3 {
+      color: #f5f5f5 !important;
+    }
+
+    body[data-theme="dark"] a:link {
+      color: #5fb894 !important;
+    }
+
+    body[data-theme="dark"] a:visited {
+      color: #4a9d7a !important;
+    }
+
+    body[data-theme="dark"] .wrapper,
+    body[data-theme="dark"] .navbar,
+    body[data-theme="dark"] .footer {
+      background: transparent !important;
+      background-color: transparent !important;
+      border: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
+    }
+
+    body[data-theme="dark"] .navbar .menu {
+      background: transparent !important;
+    }
+
+    body[data-theme="dark"] .navbar a,
+    body[data-theme="dark"] .footer a {
+      color: #e0e0e0 !important;
+    }
+
+    body[data-theme="dark"] .book-container {
+      background: #242424;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body[data-theme="dark"] .book-image {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    body[data-theme="dark"] .book-author {
+      color: #999 !important;
+    }
+
+    body[data-theme="dark"] main > p:first-of-type {
+      background: rgba(95, 184, 148, 0.1);
+      border-left-color: #5fb894;
+      width: fit-content;
+    }
+  </style>
+
+  {% include navbar.html %}
+  <div class="wrapper">
+    <main aria-label="Content">
+      {{ content }}
+    </main>
+    {% include footer.html %}
+  </div>
+
+</body>
+</html>
