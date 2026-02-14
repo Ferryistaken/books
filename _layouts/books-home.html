@@ -281,36 +281,41 @@ layout: compress
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2rem 1.5rem;
+      align-self: center;
+      padding: 1.5rem 1.25rem;
       text-align: center;
       border-left: 4px solid #2b5e49;
       background: rgba(43, 94, 73, 0.02);
       border-radius: 0 8px 8px 0;
-      height: 100%;
-      min-height: 0;
+      max-height: 200px;
     }
 
     @media (max-width: 768px) {
       .grid-quote-short {
         grid-column: span 1;
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 1rem;
+        max-height: 180px;
       }
     }
 
     .grid-quote-text-short {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: clamp(1.1rem, 2vw, 1.4rem);
-      line-height: 1.5;
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      line-height: 1.4;
       color: #1a1a1a;
       font-weight: 400;
       font-style: italic;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
       letter-spacing: -0.015em;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
     }
 
     .grid-quote-attribution-short {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       color: #666;
       font-weight: 400;
     }
