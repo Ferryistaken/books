@@ -163,5 +163,5 @@ plt.grid(False)
 plt.axis('off')
 
 # Save the plot as a PNG file
-# plt.savefig("umap.png", dpi=300, bbox_inches='tight')
+plt.savefig("umap.png", dpi=300, bbox_inches='tight')
 
