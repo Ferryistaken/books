@@ -117,15 +117,16 @@ for idx, isbn in enumerate(unique_isbns):
 # Update layout for square plot without legend
 squareFig.update_layout(
     title='',
-    plot_bgcolor='white',
+    plot_bgcolor='#FAF8F5',  # Cream background to match site theme
+    paper_bgcolor='#FAF8F5',  # Match outer background
     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
     showlegend=False,  # Disable the legend
     autosize=False,    # Disable autosizing
-    width=350,         # Width of the plot
-    height=350,         # Height of the plot (same as width for square)
-    margin=dict(       # Adjust margins to fit in an iframe without scrollbars
-        l=100,           # Left margin
+    width=450,         # Width of the plot
+    height=450,        # Height of the plot (same as width for square)
+    margin=dict(       # Minimal margins for cleaner look
+        l=0,           # Left margin
         r=0,           # Right margin
         b=0,           # Bottom margin
         t=0,           # Top margin

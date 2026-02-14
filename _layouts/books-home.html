@@ -24,13 +24,19 @@ layout: compress
     }
 
     h1 {
-      font-size: 3rem !important;
+      font-size: 4.5rem !important;
       margin-bottom: 1.5rem;
+      text-align: center;
+      font-weight: 400;
     }
 
     h2 {
       font-size: 2rem !important;
       margin-bottom: 1rem;
+    }
+
+    main > h1:first-child {
+      margin-top: 2rem;
     }
 
     a:link {
@@ -108,9 +114,20 @@ layout: compress
     }
 
     iframe {
-      border: 1px solid rgba(51, 51, 52, 0.1);
+      border: none !important;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      box-shadow: none;
+      background: transparent;
+    }
+
+    /* Center the stats text */
+    main > p:nth-of-type(1) {
+      text-align: center;
+    }
+
+    /* Center the plot container */
+    main > div[style*="text-align: center"] {
+      margin: 2rem 0;
     }
 
     /* Stats section styling */
