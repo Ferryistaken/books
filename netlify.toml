@@ -1,6 +1,8 @@
 [build]
-  command = "bundle install && jekyll build"
+  command = "bash build.sh"
   publish = "_site"
 
 [build.environment]
   RUBY_VERSION = "3.2.2"
+  # Use CPU-only PyTorch to reduce disk space usage
+  PIP_EXTRA_INDEX_URL = "https://download.pytorch.org/whl/cpu"
