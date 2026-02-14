@@ -11,157 +11,202 @@ import matplotlib.pyplot as plt
 import numpy as np
 import requests
 import os
+import hashlib
 
-print("Loading Model")
+# Function to compute hash of input files
+def compute_data_hash():
+    """Compute hash of sheet.csv and books_cache.json to detect changes"""
+    hasher = hashlib.md5()
 
-# Load the model
-model = SentenceTransformer("all-MiniLM-L6-v2")
-model.max_seq_length = 256
+    with open('sheet.csv', 'rb') as f:
+        hasher.update(f.read())
 
-print("Loading data")
+    if os.path.exists('books_cache.json'):
+        with open('books_cache.json', 'rb') as f:
+            hasher.update(f.read())
 
-# Read the CSV file
-df = pd.read_csv('sheet.csv')
+    return hasher.hexdigest()
 
-# Load cached book data
-with open("books_cache.json", "r") as file:
-    isbn_to_info = json.load(file)
+# Check if we can skip regeneration
+current_hash = compute_data_hash()
+cache_valid = False
 
-# Drop rows where highlight is NaN or empty
-df = df.dropna(subset=['highlight'])
-df['highlight'] = df['highlight'].astype(str).str.strip()
-df = df[df['highlight'] != '']
-df = df[df['highlight'].str.lower() != 'nan']
+if os.path.exists('.embeddings_cache_hash') and os.path.exists('embeddings.json') and os.path.exists('umap.png'):
+    with open('.embeddings_cache_hash', 'r') as f:
+        cached_hash = f.read().strip()
+    if cached_hash == current_hash:
+        print("Data unchanged, skipping embeddings generation")
+        cache_valid = True
 
-# Drop rows where ISBN is NaN or empty
-df = df.dropna(subset=['isbn'])
-df = df[df['isbn'].astype(str).str.strip() != '']
+if not cache_valid:
+    print("Loading Model")
 
-# If there are no valid rows left, exit the script
-if df.empty:
-    print("No data to process")
-    exit(0)
+    # Cache model in a persistent directory
+    cache_dir = os.path.expanduser("~/.cache/sentence_transformers")
+    os.makedirs(cache_dir, exist_ok=True)
 
-# Group the DataFrame by ISBN and filter out groups with no valid highlights
-df = df.groupby('isbn').filter(lambda x: x['highlight'].str.strip().astype(bool).any())
+    # Load the model (will use cache if available)
+    model = SentenceTransformer("all-MiniLM-L6-v2", cache_folder=cache_dir)
+    model.max_seq_length = 256
 
-# If there are no books with valid highlights, exit the script
-if df.empty:
-    print("No books with valid highlights to process")
-    exit(0)
+    print("Loading data")
 
-# Reset index after filtering
-df.reset_index(drop=True, inplace=True)
+    # Read the CSV file
+    df = pd.read_csv('sheet.csv')
 
-# Maintain the original 'index' column
-df['original_index'] = df.index
+    # Load cached book data
+    with open("books_cache.json", "r") as file:
+        isbn_to_info = json.load(file)
 
-# Group by ISBN and create indices within each group
-df['group_index'] = df.groupby('isbn').cumcount()
+    # Drop rows where highlight is NaN or empty
+    df = df.dropna(subset=['highlight'])
+    df['highlight'] = df['highlight'].astype(str).str.strip()
+    df = df[df['highlight'] != '']
+    df = df[df['highlight'].str.lower() != 'nan']
 
-# Extract sentences (highlights/quotes), ISBNs, and group indices
-sentences = df['highlight'].astype(str).tolist()  # Convert highlights to strings
-isbns = df['isbn'].tolist()
-# Handle ISBNs more carefully to avoid conversion errors
-isbns = [str(int(float(i))) if pd.notna(i) else "0" for i in isbns]
-group_indices = df['group_index'].tolist()
+    # Drop rows where ISBN is NaN or empty
+    df = df.dropna(subset=['isbn'])
+    df = df[df['isbn'].astype(str).str.strip() != '']
 
-#print(isbn_to_info.keys())
-#print([isbn_to_info[isbn] for isbn in isbns])
+    # If there are no valid rows left, exit the script
+    if df.empty:
+        print("No data to process")
+        exit(0)
 
-# Create arrays for titles and authors
-titles = [isbn_to_info[isbn]["title"] if isbn in isbn_to_info else "Title Not Found" for isbn in isbns]
-authors = [', '.join(isbn_to_info[isbn]["authors"]) if isbn in isbn_to_info else "Author Not Found" for isbn in isbns]
+    # Group the DataFrame by ISBN and filter out groups with no valid highlights
+    df = df.groupby('isbn').filter(lambda x: x['highlight'].str.strip().astype(bool).any())
 
-print(titles)
+    # If there are no books with valid highlights, exit the script
+    if df.empty:
+        print("No books with valid highlights to process")
+        exit(0)
 
-print("Encoding data")
-print(f"Number of sentences to encode: {len(sentences)}")
-print(f"Sample sentences: {sentences[:3]}")
+    # Reset index after filtering
+    df.reset_index(drop=True, inplace=True)
 
-# Ensure all sentences are strings and not empty
-sentences = [str(s).strip() for s in sentences if s and str(s).strip() and str(s).lower() != 'nan']
+    # Maintain the original 'index' column
+    df['original_index'] = df.index
 
-if not sentences:
-    print("No valid sentences to encode after cleaning")
-    exit(1)
+    # Group by ISBN and create indices within each group
+    df['group_index'] = df.groupby('isbn').cumcount()
 
-# Generate embeddings
-try:
-    embeddings = model.encode(sentences, normalize_embeddings=True)
-except Exception as e:
-    print(f"Error during encoding: {e}")
-    print(f"Problematic sentences types: {[type(s) for s in sentences[:5]]}")
-    import traceback
-    traceback.print_exc()
-    exit(1)
+    # Extract sentences (highlights/quotes), ISBNs, and group indices
+    sentences = df['highlight'].astype(str).tolist()  # Convert highlights to strings
+    isbns = df['isbn'].tolist()
+    # Handle ISBNs more carefully to avoid conversion errors
+    isbns = [str(int(float(i))) if pd.notna(i) else "0" for i in isbns]
+    group_indices = df['group_index'].tolist()
 
-# Convert embeddings to list for JSON compatibility and save to JSON
-embeddings_list = embeddings.tolist()
-data = {
-    "sentences": sentences, 
-    "embeddings": embeddings_list, 
-    "isbns": isbns, 
-    "group_indices": group_indices,
-    "titles": titles,  # Add the book titles
-    "authors": authors  # Add the authors
-}
+    #print(isbn_to_info.keys())
+    #print([isbn_to_info[isbn] for isbn in isbns])
 
-print("Saving embeddings")
+    # Create arrays for titles and authors
+    titles = [isbn_to_info[isbn]["title"] if isbn in isbn_to_info else "Title Not Found" for isbn in isbns]
+    authors = [', '.join(isbn_to_info[isbn]["authors"]) if isbn in isbn_to_info else "Author Not Found" for isbn in isbns]
 
-with open("embeddings.json", "w") as file:
-    json.dump(data, file)
+    print(titles)
 
-print("Generating visualization")
+    print("Encoding data")
+    print(f"Number of sentences to encode: {len(sentences)}")
+    print(f"Sample sentences: {sentences[:3]}")
 
-# Dimensionality reduction using UMAP
-umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit_transform(embeddings)
+    # Ensure all sentences are strings and not empty
+    sentences = [str(s).strip() for s in sentences if s and str(s).strip() and str(s).lower() != 'nan']
 
-markers = ['o', 's', '^', 'D', '*', 'x', '+', '>', '<', 'p', 'h', 'H', 'X', 'd']
+    if not sentences:
+        print("No valid sentences to encode after cleaning")
+        exit(1)
 
-unique_isbns = list(set(isbns))  # Use converted ISBNs, not raw DataFrame values
+    # Generate embeddings
+    try:
+        embeddings = model.encode(sentences, normalize_embeddings=True, show_progress_bar=False)
+    except Exception as e:
+        print(f"Error during encoding: {e}")
+        print(f"Problematic sentences types: {[type(s) for s in sentences[:5]]}")
+        import traceback
+        traceback.print_exc()
+        exit(1)
 
-colors = plt.cm.jet(np.linspace(0, 1, len(unique_isbns)))
-isbn_to_color = {isbn: color for isbn, color in zip(unique_isbns, colors)}
+    # Convert embeddings to list for JSON compatibility and save to JSON
+    embeddings_list = embeddings.tolist()
+    data = {
+        "sentences": sentences,
+        "embeddings": embeddings_list,
+        "isbns": isbns,
+        "group_indices": group_indices,
+        "titles": titles,  # Add the book titles
+        "authors": authors  # Add the authors
+    }
 
-plt.style.use('https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-dark.mplstyle')
+    print("Saving embeddings")
 
-# Plotting
-plt.figure(figsize=(12,10))
-legend_elements = []
-texts = []  # List to store all the texts for adjust_text
+    with open("embeddings.json", "w") as file:
+        json.dump(data, file)
 
-for idx, isbn in enumerate(unique_isbns):
-    # Skip books not found in cache
-    if isbn not in isbn_to_info:
-        continue
+    print("Generating visualization")
 
-    indices = [i for i, x in enumerate(isbns) if x == isbn]
-    marker_style = markers[idx % len(markers)]  # Cycle through markers
+    # Dimensionality reduction using UMAP with faster settings
+    umap_embeddings = umap.UMAP(
+        n_neighbors=15,
+        n_components=2,
+        metric='cosine',
+        n_epochs=200,  # Reduced from default 500 for speed
+        init='random',  # Faster than spectral
+        verbose=False
+    ).fit_transform(embeddings)
 
-    # Scatter plot
-    scatter = plt.scatter(umap_embeddings[indices, 0], umap_embeddings[indices, 1], s=30, color=isbn_to_color[isbn], marker=marker_style)
+    markers = ['o', 's', '^', 'D', '*', 'x', '+', '>', '<', 'p', 'h', 'H', 'X', 'd']
 
-    # Calculating centroid of each cluster
-    centroid_x = np.mean(umap_embeddings[indices, 0])
-    centroid_y = np.mean(umap_embeddings[indices, 1])
+    unique_isbns = list(set(isbns))  # Use converted ISBNs, not raw DataFrame values
 
-    title = isbn_to_info[isbn]["title"]
-    authors = ', '.join(isbn_to_info[isbn]["authors"])
-    book_label = f"{title} by {authors}"
-    text = plt.text(centroid_x, centroid_y, book_label, fontsize=8, ha='center', va='center', color='white')
-    texts.append(text)
-    legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=book_label, markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
+    colors = plt.cm.jet(np.linspace(0, 1, len(unique_isbns)))
+    isbn_to_color = {isbn: color for isbn, color in zip(unique_isbns, colors)}
 
-plt.legend(handles=legend_elements, title='Books', bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.style.use('https://github.com/dhaitz/matplotlib-stylesheets/raw/master/pitayasmoothie-dark.mplstyle')
 
-# Use adjust_text to iteratively adjust text position
-adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
+    # Plotting
+    plt.figure(figsize=(12,10))
+    legend_elements = []
+    texts = []  # List to store all the texts for adjust_text
 
-plt.title('Vector Space (UMAP)', fontsize=20)
-plt.grid(False)
-plt.axis('off')
+    for idx, isbn in enumerate(unique_isbns):
+        # Skip books not found in cache
+        if isbn not in isbn_to_info:
+            continue
 
-# Save the plot as a PNG file
-plt.savefig("umap.png", dpi=300, bbox_inches='tight')
+        indices = [i for i, x in enumerate(isbns) if x == isbn]
+        marker_style = markers[idx % len(markers)]  # Cycle through markers
 
+        # Scatter plot
+        scatter = plt.scatter(umap_embeddings[indices, 0], umap_embeddings[indices, 1], s=30, color=isbn_to_color[isbn], marker=marker_style)
+
+        # Calculating centroid of each cluster
+        centroid_x = np.mean(umap_embeddings[indices, 0])
+        centroid_y = np.mean(umap_embeddings[indices, 1])
+
+        title = isbn_to_info[isbn]["title"]
+        authors = ', '.join(isbn_to_info[isbn]["authors"])
+        book_label = f"{title} by {authors}"
+        text = plt.text(centroid_x, centroid_y, book_label, fontsize=8, ha='center', va='center', color='white')
+        texts.append(text)
+        legend_elements.append(plt.Line2D([0], [0], marker=marker_style, color='w', label=book_label, markersize=10, markerfacecolor=scatter.get_facecolor()[0], linestyle='None'))
+
+    plt.legend(handles=legend_elements, title='Books', bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    # Use adjust_text to iteratively adjust text position
+    adjust_text(texts, arrowprops=dict(arrowstyle='->', color='red'))
+
+    plt.title('Vector Space (UMAP)', fontsize=20)
+    plt.grid(False)
+    plt.axis('off')
+
+    # Save the plot as a PNG file
+    plt.savefig("umap.png", dpi=300, bbox_inches='tight')
+
+    # Save the hash to mark cache as valid
+    with open('.embeddings_cache_hash', 'w') as f:
+        f.write(current_hash)
+
+    print("Embeddings generated successfully")
+else:
+    print("Using cached embeddings")

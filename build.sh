@@ -11,6 +11,8 @@ print_success() {
 
 echo "Starting build process..."
 
+# Create cache directories
+mkdir -p ~/.cache/sentence_transformers
 
 # Downloading data
 curl -L $SHEET_URL -o sheet.csv
@@ -19,14 +21,20 @@ print_success "Data downloaded."
 python3 google-books-data.py
 print_success "Google API Queried"
 
-# Running Python scripts
+# Running Python scripts - embeddings.py now has smart caching
 python3 embeddings.py
 print_success "embeddings.py executed."
 
-python3 live-embeddings.py
-print_success "live-embeddings.py executed."
+# These can run in parallel as they're independent
+python3 live-embeddings.py &
+LIVE_EMB_PID=$!
+python3 gethighlights.py &
+HIGHLIGHTS_PID=$!
 
-python3 gethighlights.py
+# Wait for both to complete
+wait $LIVE_EMB_PID
+print_success "live-embeddings.py executed."
+wait $HIGHLIGHTS_PID
 print_success "gethighlights.py executed."
 
 # Installing Jekyll dependencies

@@ -26,8 +26,15 @@ embeddings = np.array(data["embeddings"])
 sentences = data["sentences"]
 isbns = data["isbns"]
 
-# Dimensionality reduction using UMAP
-umap_embeddings = umap.UMAP(n_neighbors=15, n_components=2, metric='cosine').fit_transform(embeddings)
+# Dimensionality reduction using UMAP with faster settings
+umap_embeddings = umap.UMAP(
+    n_neighbors=15,
+    n_components=2,
+    metric='cosine',
+    n_epochs=200,  # Reduced from default 500 for speed
+    init='random',  # Faster than spectral
+    verbose=False
+).fit_transform(embeddings)
 
 print("- ✅ Created UMAP")
 
