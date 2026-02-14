@@ -62,28 +62,7 @@ layout: books-home
   {% endfor %}
 {% endfor %}
 
-{% comment %} Select 3 random highlights for top carousel {% endcomment %}
-{% assign random_seed = "now" | date: "%s" | modulo: all_highlights.size %}
-{% assign carousel_quotes = "" | split: "" %}
-{% for i in (0..2) %}
-  {% assign index = random_seed | plus: i | times: 73 | modulo: all_highlights.size %}
-  {% assign carousel_quotes = carousel_quotes | push: all_highlights[index] %}
-{% endfor %}
-
-<div class="quote-carousel">
-  {% for quote_data in carousel_quotes %}
-    {% assign parts = quote_data | split: "|||" %}
-    {% assign quote = parts[0] %}
-    {% assign title = parts[1] %}
-    {% assign authors = parts[2] %}
-    <div class="carousel-quote">
-      <p class="quote-text">"{{ quote }}"</p>
-      <p class="quote-attribution">— {{ title }}, {{ authors }}</p>
-    </div>
-  {% endfor %}
-</div>
-
-<div style="text-align: center; margin: 0; overflow: hidden;">
+<div style="text-align: center; margin: 2rem 0; overflow: hidden;">
 <iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0; overflow: hidden;" scrolling="no"></iframe>
 </div>
 
@@ -101,10 +80,20 @@ layout: books-home
         {% assign quote = parts[0] %}
         {% assign q_title = parts[1] %}
         {% assign q_authors = parts[2] %}
-        <div class="grid-quote">
-          <p class="grid-quote-text">"{{ quote }}"</p>
-          <p class="grid-quote-attribution">— {{ q_title }}</p>
-        </div>
+        {% assign quote_length = quote | size %}
+        {% if quote_length > 200 %}
+          {% comment %} Long quote - full row, no background {% endcomment %}
+          <div class="grid-quote-long">
+            <p class="grid-quote-text-long">"{{ quote }}"</p>
+            <p class="grid-quote-attribution-long">— {{ q_title }}</p>
+          </div>
+        {% else %}
+          {% comment %} Short quote - inline, with background {% endcomment %}
+          <div class="grid-quote-short">
+            <p class="grid-quote-text-short">"{{ quote }}"</p>
+            <p class="grid-quote-attribution-short">— {{ q_title }}</p>
+          </div>
+        {% endif %}
       {% endif %}
     {% endif %}
 

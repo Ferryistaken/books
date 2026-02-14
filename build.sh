@@ -19,15 +19,21 @@ print_success "Data downloaded."
 python3 google-books-data.py
 print_success "Google API Queried"
 
-# Running Python scripts
-python3 embeddings.py
-print_success "embeddings.py executed."
+# Running Python scripts in parallel where possible
+python3 embeddings.py &
+EMBED_PID=$!
+python3 gethighlights.py &
+HIGHLIGHTS_PID=$!
 
+# Wait for both to complete
+wait $EMBED_PID
+print_success "embeddings.py executed."
+wait $HIGHLIGHTS_PID
+print_success "gethighlights.py executed."
+
+# This depends on embeddings.py output
 python3 live-embeddings.py
 print_success "live-embeddings.py executed."
-
-python3 gethighlights.py
-print_success "gethighlights.py executed."
 
 # Installing Jekyll dependencies
 bundle install

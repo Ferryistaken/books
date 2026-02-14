@@ -113,6 +113,16 @@ layout: compress
       padding: 1.5rem;
       transition: box-shadow 0.3s ease, transform 0.2s ease;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .book-container img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 2/3;
+      object-fit: cover;
     }
 
     a:has(.book-container) {
@@ -126,6 +136,17 @@ layout: compress
 
     .book-title {
       color: #1a1a1a !important;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    .book-author {
+      margin-top: auto;
+      text-align: center;
     }
 
     body[data-theme="dark"] .book-title {
@@ -239,75 +260,13 @@ layout: compress
       width: fit-content;
     }
 
-    /* Quote Carousel at top */
-    .quote-carousel {
-      margin: 3rem auto;
-      max-width: 900px;
-      min-height: 200px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .carousel-quote {
-      position: absolute;
-      width: 100%;
-      opacity: 0;
-      animation: fadeInOut 18s infinite;
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .carousel-quote:nth-child(1) {
-      animation-delay: 0s;
-    }
-
-    .carousel-quote:nth-child(2) {
-      animation-delay: 6s;
-    }
-
-    .carousel-quote:nth-child(3) {
-      animation-delay: 12s;
-    }
-
-    @keyframes fadeInOut {
-      0%, 27% { opacity: 0; }
-      33%, 60% { opacity: 1; }
-      67%, 100% { opacity: 0; }
-    }
-
-    .quote-text {
-      font-family: 'Instrument Serif', Georgia, serif;
-      font-size: clamp(1.5rem, 3vw, 2.5rem);
-      line-height: 1.4;
-      color: #1a1a1a;
-      font-weight: 400;
-      font-style: italic;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .quote-attribution {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: 1rem;
-      color: #666;
-      font-weight: 400;
-    }
-
-    body[data-theme="dark"] .quote-text {
-      color: #f5f5f5;
-    }
-
-    body[data-theme="dark"] .quote-attribution {
-      color: #999;
-    }
-
-    /* Grid-interspersed quotes */
-    .grid-quote {
+    /* Short quotes - inline with books */
+    .grid-quote-short {
       grid-column: span 2;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 3rem 2rem;
+      padding: 2rem 1.5rem;
       text-align: center;
       border-left: 4px solid #2b5e49;
       background: rgba(43, 94, 73, 0.02);
@@ -315,40 +274,77 @@ layout: compress
     }
 
     @media (max-width: 768px) {
-      .grid-quote {
+      .grid-quote-short {
         grid-column: span 1;
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1rem;
       }
     }
 
-    .grid-quote-text {
+    .grid-quote-text-short {
       font-family: 'Instrument Serif', Georgia, serif;
-      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      line-height: 1.5;
+      color: #1a1a1a;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.015em;
+    }
+
+    .grid-quote-attribution-short {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 0.85rem;
+      color: #666;
+      font-weight: 400;
+    }
+
+    body[data-theme="dark"] .grid-quote-short {
+      background: rgba(95, 184, 148, 0.03);
+      border-left-color: #5fb894;
+    }
+
+    body[data-theme="dark"] .grid-quote-text-short {
+      color: #f5f5f5;
+    }
+
+    body[data-theme="dark"] .grid-quote-attribution-short {
+      color: #999;
+    }
+
+    /* Long quotes - full row, no background */
+    .grid-quote-long {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      padding: 3rem 0;
+      text-align: left;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .grid-quote-text-long {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
       line-height: 1.5;
       color: #1a1a1a;
       font-weight: 400;
       font-style: italic;
       margin-bottom: 1rem;
-      letter-spacing: -0.015em;
+      letter-spacing: -0.02em;
     }
 
-    .grid-quote-attribution {
+    .grid-quote-attribution-long {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: #666;
       font-weight: 400;
     }
 
-    body[data-theme="dark"] .grid-quote {
-      background: rgba(95, 184, 148, 0.03);
-      border-left-color: #5fb894;
-    }
-
-    body[data-theme="dark"] .grid-quote-text {
+    body[data-theme="dark"] .grid-quote-text-long {
       color: #f5f5f5;
     }
 
-    body[data-theme="dark"] .grid-quote-attribution {
+    body[data-theme="dark"] .grid-quote-attribution-long {
       color: #999;
     }
   </style>

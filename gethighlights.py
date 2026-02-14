@@ -47,7 +47,7 @@ def is_number(s):
 
 # Process each row in the CSV
 for row in csv_reader:
-    isbn = row['isbn']
+    isbn = row['isbn'].replace("-", "")
     highlight = row['highlight']
 
     # Check if ISBN is a number
