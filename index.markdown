@@ -2,7 +2,7 @@
 layout: books-home
 ---
 
-<h1 style="font-size: clamp(4rem, 10vw, 10rem); font-weight: 400; text-align: left; letter-spacing: -0.03em; line-height: 1.05; font-family: 'Instrument Serif', Georgia, serif;">My Book Highlights</h1>
+<h1 style="font-size: clamp(4rem, 10vw, 10rem); font-weight: 400; text-align: left; letter-spacing: -0.03em; line-height: 1.05; font-family: 'Instrument Serif', Georgia, serif;">My <em style="font-style: italic;">Book</em> Highlights</h1>
 
 ---
 
@@ -58,7 +58,7 @@ layout: books-home
 <iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0; overflow: hidden;" scrolling="no"></iframe>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+<div class="book-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
   {% assign sorted_books = site.books | sort: 'first-author-last-name' %}
   {% for book in sorted_books %}
     <a href="{{ book.url | relative_url }}" style="text-decoration: none; color: inherit;">

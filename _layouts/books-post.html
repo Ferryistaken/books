@@ -9,6 +9,10 @@ layout: compress
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       background: #FAF8F5 !important;
       color: #2c2c2c !important;
@@ -155,48 +159,37 @@ layout: compress
 
     .highlight-text {
       display: block;
-      padding: 1.25rem 1.75rem;
-      margin: 1.5rem 0;
-      background: rgba(43, 94, 73, 0.03);
-      border-left: 4px solid #2b5e49;
-      border-radius: 0 4px 4px 0;
-      font-size: 1.1rem;
-      line-height: 1.8;
-      font-style: italic;
+      padding: 1.5rem 0;
+      margin: 2rem 0;
+      border-left: 3px solid #2b5e49;
+      padding-left: 2rem;
+      font-size: 1.15rem;
+      line-height: 1.75;
+      font-style: normal;
       color: #1a1a1a;
-      position: relative;
-    }
-
-    .highlight-text::before {
-      content: '"';
-      position: absolute;
-      left: 0.5rem;
-      top: 0.5rem;
-      font-size: 2.5rem;
-      color: rgba(43, 94, 73, 0.2);
-      font-family: Georgia, serif;
-      line-height: 1;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-weight: 400;
+      letter-spacing: -0.011em;
     }
 
     body[data-theme="dark"] .highlight-text {
-      background: rgba(95, 184, 148, 0.05);
       border-left-color: #5fb894;
       color: #e0e0e0;
     }
 
-    body[data-theme="dark"] .highlight-text::before {
-      color: rgba(95, 184, 148, 0.2);
-    }
-
     .highlight-attribution {
-      color: #666;
-      font-style: italic;
-      margin-top: 0.5rem;
+      color: #888;
+      font-style: normal;
+      margin-top: 1rem;
       display: block;
+      font-size: 0.9rem;
+      font-weight: 400;
+      opacity: 0.8;
     }
 
     body[data-theme="dark"] .highlight-attribution {
       color: #999;
+      opacity: 0.7;
     }
 
     .svg-icon {
