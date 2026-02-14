@@ -1,0 +1,103 @@
+---
+layout: compress
+---
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: " en " }}">
+{% include header.html %}
+
+<body data-theme="{{ site.mode }}">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+    body {
+      background: #FAF8F5 !important;
+      color: #2c2c2c !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+      line-height: 1.6;
+    }
+
+    body[data-theme="dark"] {
+      background: #1a1a1a !important;
+      color: #e0e0e0 !important;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Instrument Serif', Georgia, serif !important;
+      color: #1a1a1a !important;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    body[data-theme="dark"] h1,
+    body[data-theme="dark"] h2,
+    body[data-theme="dark"] h3 {
+      color: #f5f5f5 !important;
+    }
+
+    h1 {
+      font-size: 3.5rem !important;
+      margin: 2rem 0;
+    }
+
+    a {
+      color: #2b5e49 !important;
+      text-decoration: none;
+    }
+
+    body[data-theme="dark"] a {
+      color: #5fb894 !important;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .wrapper {
+      background: transparent !important;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .navbar, .footer {
+      background: rgba(51, 51, 52, 0.02) !important;
+      color: #2c2c2c !important;
+      border-bottom: 1px solid rgba(51, 51, 52, 0.1);
+    }
+
+    body[data-theme="dark"] .navbar,
+    body[data-theme="dark"] .footer {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .footer {
+      border-top: 1px solid rgba(51, 51, 52, 0.1);
+      border-bottom: none;
+    }
+
+    .navbar a, .footer a {
+      color: #2c2c2c !important;
+    }
+
+    body[data-theme="dark"] .navbar a,
+    body[data-theme="dark"] .footer a {
+      color: #e0e0e0 !important;
+    }
+
+    iframe {
+      border: none !important;
+      background: transparent;
+    }
+  </style>
+
+  {% include navbar.html %}
+  <div class="wrapper">
+    <main aria-label="Content">
+      <h1>{{ page.title }}</h1>
+      {{ content }}
+    </main>
+    {% include footer.html %}
+  </div>
+</body>
+</html>
