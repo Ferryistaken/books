@@ -90,13 +90,15 @@ for idx, isbn in enumerate(unique_isbns):
 # Update layout
 fig.update_layout(
     title='',
-    plot_bgcolor='white',
+    plot_bgcolor='rgba(0,0,0,0)',  # Transparent to adapt to theme
+    paper_bgcolor='rgba(0,0,0,0)',  # Transparent outer background
     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
 )
 
 # Save the figure as an HTML file
-fig.write_html("plotly-out.html")
+config = {'displayModeBar': False, 'scrollZoom': False}
+fig.write_html("plotly-out.html", config=config)
 
 print("- ✅ Plotted first figure")
 

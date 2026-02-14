@@ -132,6 +132,10 @@ legend_elements = []
 texts = []  # List to store all the texts for adjust_text
 
 for idx, isbn in enumerate(unique_isbns):
+    # Skip books not found in cache
+    if isbn not in isbn_to_info:
+        continue
+
     indices = [i for i, x in enumerate(isbns) if x == isbn]
     marker_style = markers[idx % len(markers)]  # Cycle through markers
 
@@ -142,8 +146,8 @@ for idx, isbn in enumerate(unique_isbns):
     centroid_x = np.mean(umap_embeddings[indices, 0])
     centroid_y = np.mean(umap_embeddings[indices, 1])
 
-    title = isbn_to_info[isbn]["title"] if isbn in isbn_to_info else "Title Not Found"
-    authors = ', '.join(isbn_to_info[isbn]["authors"]) if isbn in isbn_to_info else "Author Not Found"
+    title = isbn_to_info[isbn]["title"]
+    authors = ', '.join(isbn_to_info[isbn]["authors"])
     book_label = f"{title} by {authors}"
     text = plt.text(centroid_x, centroid_y, book_label, fontsize=8, ha='center', va='center', color='white')
     texts.append(text)
@@ -159,5 +163,5 @@ plt.grid(False)
 plt.axis('off')
 
 # Save the plot as a PNG file
-# plt.savefig("umap.png", dpi=300, bbox_inches='tight')
+plt.savefig("umap.png", dpi=300, bbox_inches='tight')
 
