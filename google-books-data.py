@@ -22,16 +22,41 @@ def fetch_and_cache_books_data(sheet_url, cache_file):
         unique_isbns.add(int(row['isbn']))
 
     api_key = os.environ.get("GOOGLE_API_KEY")
+
+    # Load existing cache if it exists
     cache = {}
+    if os.path.exists(cache_file):
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as file:
+                cache = json.load(file)
+            print(f"Loaded {len(cache)} books from cache")
+        except Exception as e:
+            print(f"Warning: Could not load cache file: {e}")
+            cache = {}
 
     google_calls = 0
+    new_books = 0
+
     for isbn in unique_isbns:
-        print(isbn)
+        isbn_str = str(isbn)
+
+        # Only query API if ISBN not already cached
+        if isbn_str in cache:
+            continue
+
+        print(f"Fetching new book: {isbn}")
         book_data = get_book_info(isbn, api_key)
         google_calls += 1
-        if book_data:
-            cache[isbn] = book_data
+        new_books += 1
 
+        if book_data:
+            cache[isbn_str] = book_data
+
+    print(f"New books fetched: {new_books}")
+    print(f"Total books in cache: {len(cache)}")
+    print(f"TOTAL GOOGLE CALLS: {google_calls}")
+
+    # Write cache back to file
     with open(cache_file, 'w', encoding='utf-8') as file:
         json.dump(cache, file, indent=4)
 
@@ -64,6 +89,3 @@ if __name__ == "__main__":
     sheet_url = 'https://docs.google.com/spreadsheets/d/1n28Iqsj9nZL-ku6HOPJPSa6KUEpQ6xO00McQ96f2dww/export?exportFormat=csv'
     cache_file = 'books_cache.json'
     google_calls = fetch_and_cache_books_data(sheet_url, cache_file)
-
-    print("TOTAL GOOGLE CALLS: ", google_calls)
-
