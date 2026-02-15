@@ -261,7 +261,6 @@
         const searchBtn = document.getElementById('searchButton');
         const searchInput = document.getElementById('searchQuery');
 
-        // Debug logging
         console.log('Search elements:', { modal, openBtn, closeBtn, searchBtn, searchInput });
 
         if (!modal || !openBtn || !closeBtn || !searchBtn || !searchInput) {
@@ -269,7 +268,6 @@
             return;
         }
 
-        // Open modal
         openBtn.addEventListener('click', (e) => {
             e.preventDefault();
             console.log('Opening search modal');
@@ -277,31 +275,26 @@
             setTimeout(() => searchInput.focus(), 100);
         });
 
-        // Close modal
         closeBtn.addEventListener('click', () => {
             modal.style.display = 'none';
         });
 
-        // Close on escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modal.style.display === 'block') {
                 modal.style.display = 'none';
             }
         });
 
-        // Close on backdrop click
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
             }
         });
 
-        // Search on button click
         if (searchBtn) {
             searchBtn.addEventListener('click', performSearch);
         }
 
-        // Search on enter
         if (searchInput) {
             searchInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
@@ -324,14 +317,13 @@
             return;
         }
 
-        // Show loading state
         searchBtn.disabled = true;
         searchBtn.innerHTML = '<span class="loading-spinner"></span>Searching...';
         statusDiv.style.display = 'block';
         statusDiv.innerHTML = '<span class="loading-spinner"></span>Searching through your highlights...';
         resultsDiv.innerHTML = '';
 
-        const searchUrl = `{{ site.url }}/.netlify/functions/search?q=${encodeURIComponent(query)}`;
+        const searchUrl = '{{ site.url }}/.netlify/functions/search?q=' + encodeURIComponent(query);
 
         fetch(searchUrl)
             .then(response => {
@@ -390,7 +382,7 @@
 
             const linkEl = document.createElement('a');
             linkEl.className = 'search-result-link';
-            linkEl.href = `{{ site.url }}/books/${result.isbn}#${result.index}`;
+            linkEl.href = '{{ site.url }}/books/' + result.isbn + '#' + result.index;
             linkEl.textContent = 'View highlight →';
             linkEl.target = '_blank';
 
