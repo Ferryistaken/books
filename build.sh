@@ -13,6 +13,25 @@ echo "Starting build process..."
 
 # Create cache directories
 mkdir -p ~/.cache/sentence_transformers
+mkdir -p /opt/build/cache/books
+
+# Restore cached files from Netlify's cache directory
+if [ -f /opt/build/cache/books/books_cache.json ]; then
+    cp /opt/build/cache/books/books_cache.json ./books_cache.json
+    print_success "Restored books_cache.json from Netlify cache"
+fi
+
+if [ -f /opt/build/cache/books/.embeddings_cache_hash ]; then
+    cp /opt/build/cache/books/.embeddings_cache_hash ./.embeddings_cache_hash
+fi
+
+if [ -f /opt/build/cache/books/embeddings.json ]; then
+    cp /opt/build/cache/books/embeddings.json ./embeddings.json
+fi
+
+if [ -f /opt/build/cache/books/umap.png ]; then
+    cp /opt/build/cache/books/umap.png ./umap.png
+fi
 
 # Downloading data
 curl -L $SHEET_URL -o sheet.csv
@@ -45,5 +64,12 @@ print_success "Bundle install completed."
 bundle exec jekyll build
 workbox generateSW workbox-config.js
 print_success "Jekyll build completed."
+
+# Save files to Netlify cache for next build
+cp books_cache.json /opt/build/cache/books/books_cache.json 2>/dev/null || true
+cp .embeddings_cache_hash /opt/build/cache/books/.embeddings_cache_hash 2>/dev/null || true
+cp embeddings.json /opt/build/cache/books/embeddings.json 2>/dev/null || true
+cp umap.png /opt/build/cache/books/umap.png 2>/dev/null || true
+print_success "Cached files for next build"
 
 echo "Build process finished."
