@@ -261,10 +261,20 @@
         const searchBtn = document.getElementById('searchButton');
         const searchInput = document.getElementById('searchQuery');
 
+        // Debug logging
+        console.log('Search elements:', { modal, openBtn, closeBtn, searchBtn, searchInput });
+
+        if (!modal || !openBtn || !closeBtn || !searchBtn || !searchInput) {
+            console.error('Search: Missing required elements!');
+            return;
+        }
+
         // Open modal
-        openBtn.addEventListener('click', () => {
+        openBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Opening search modal');
             modal.style.display = 'block';
-            searchInput.focus();
+            setTimeout(() => searchInput.focus(), 100);
         });
 
         // Close modal
@@ -287,14 +297,18 @@
         });
 
         // Search on button click
-        searchBtn.addEventListener('click', performSearch);
+        if (searchBtn) {
+            searchBtn.addEventListener('click', performSearch);
+        }
 
         // Search on enter
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
-        });
+        if (searchInput) {
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
     });
 
     function performSearch() {
