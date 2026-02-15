@@ -53,14 +53,50 @@ layout: books-home
 
 [How I made this](https://alessandroferrari.live/book-highlights) \| 📖 Books: {{count}} \| 💡 Total Highlights: {{total_highlights}} \| 📚 Pages per Day (lifetime): {{pages_per_day}}
 
+{% comment %} Collect all highlights from all books {% endcomment %}
+{% assign all_highlights = "" | split: "" %}
+{% for book in site.books %}
+  {% for highlight in book.highlights %}
+    {% assign highlight_with_book = highlight | append: "|||" | append: book.title | append: "|||" | append: book.authors | join: ", " %}
+    {% assign all_highlights = all_highlights | push: highlight_with_book %}
+  {% endfor %}
+{% endfor %}
 
-<div style="text-align: center; margin: 0; overflow: hidden;">
+<div style="text-align: center; margin: 2rem 0; overflow: hidden;">
 <iframe src="/square-plot.html" width="450px" height="450px" style="border:none; max-width: 90vw; max-height: 90vh; margin: 0; padding: 0; overflow: hidden;" scrolling="no"></iframe>
 </div>
 
-<div class="book-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+<div class="book-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); column-gap: 2rem; row-gap: 3rem; grid-auto-flow: dense;">
   {% assign sorted_books = site.books | sort: 'first-author-last-name' %}
   {% for book in sorted_books %}
+    {% comment %} Insert quote every 7 books {% endcomment %}
+    {% assign book_index = forloop.index %}
+    {% if book_index > 1 %}
+      {% assign remainder = book_index | modulo: 7 %}
+      {% if remainder == 0 %}
+        {% assign quote_index = book_index | divided_by: 7 | times: 97 | modulo: all_highlights.size %}
+        {% assign quote_data = all_highlights[quote_index] %}
+        {% assign parts = quote_data | split: "|||" %}
+        {% assign quote = parts[0] %}
+        {% assign q_title = parts[1] %}
+        {% assign q_authors = parts[2] %}
+        {% assign quote_length = quote | size %}
+        {% if quote_length > 200 %}
+          {% comment %} Long quote - full row, no background {% endcomment %}
+          <div class="grid-quote-long">
+            <p class="grid-quote-text-long">"{{ quote }}"</p>
+            <p class="grid-quote-attribution-long">— {{ q_title }}</p>
+          </div>
+        {% else %}
+          {% comment %} Short quote - inline, with background {% endcomment %}
+          <div class="grid-quote-short">
+            <p class="grid-quote-text-short">"{{ quote }}"</p>
+            <p class="grid-quote-attribution-short">— {{ q_title }}</p>
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
     <a href="{{ book.url | relative_url }}" style="text-decoration: none; color: inherit;">
       <div class="book-container">
         {% include lazyload.html image_src=book.coverImage image_alt=book.title image_title=book.title %}

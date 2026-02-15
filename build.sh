@@ -55,7 +55,6 @@ wait $LIVE_EMB_PID
 print_success "live-embeddings.py executed."
 wait $HIGHLIGHTS_PID
 print_success "gethighlights.py executed."
-
 # Installing Jekyll dependencies
 bundle install
 print_success "Bundle install completed."

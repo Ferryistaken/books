@@ -106,6 +106,10 @@ layout: compress
     }
 
     /* Book grid styling */
+    .book-grid > a {
+      min-height: 0;
+    }
+
     .book-container {
       background: transparent;
       border: none;
@@ -113,6 +117,17 @@ layout: compress
       padding: 0;
       transition: transform 0.2s ease, opacity 0.2s ease;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      max-height: 450px;
+    }
+
+    .book-container img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+      margin-bottom: 0.75rem;
     }
 
     a:has(.book-container) {
@@ -126,6 +141,26 @@ layout: compress
 
     .book-title {
       color: #1a1a1a !important;
+      text-align: center;
+      margin: 0.5rem 0;
+      font-size: 1rem !important;
+      line-height: 1.3;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .book-author {
+      margin-top: auto;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #666;
+      padding-top: 0.5rem;
+    }
+
+    body[data-theme="dark"] .book-author {
+      color: #999;
     }
 
     body[data-theme="dark"] .book-title {
@@ -240,6 +275,102 @@ layout: compress
       background: rgba(95, 184, 148, 0.1);
       border-left-color: #5fb894;
       width: fit-content;
+    }
+
+    /* Short quotes - inline with books */
+    .grid-quote-short {
+      grid-column: span 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      align-self: center;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      border-left: 4px solid #2b5e49;
+      background: rgba(43, 94, 73, 0.02);
+      border-radius: 0 8px 8px 0;
+      max-height: 200px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-quote-short {
+        grid-column: span 1;
+        padding: 1.25rem 1rem;
+        max-height: 180px;
+      }
+    }
+
+    .grid-quote-text-short {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      line-height: 1.4;
+      color: #1a1a1a;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.015em;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+
+    .grid-quote-attribution-short {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 0.75rem;
+      color: #666;
+      font-weight: 400;
+    }
+
+    body[data-theme="dark"] .grid-quote-short {
+      background: rgba(95, 184, 148, 0.03);
+      border-left-color: #5fb894;
+    }
+
+    body[data-theme="dark"] .grid-quote-text-short {
+      color: #f5f5f5;
+    }
+
+    body[data-theme="dark"] .grid-quote-attribution-short {
+      color: #999;
+    }
+
+    /* Long quotes - full row, no background */
+    .grid-quote-long {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      padding: 3rem 0;
+      text-align: left;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .grid-quote-text-long {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      line-height: 1.5;
+      color: #1a1a1a;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .grid-quote-attribution-long {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 1rem;
+      color: #666;
+      font-weight: 400;
+    }
+
+    body[data-theme="dark"] .grid-quote-text-long {
+      color: #f5f5f5;
+    }
+
+    body[data-theme="dark"] .grid-quote-attribution-long {
+      color: #999;
     }
   </style>
 
