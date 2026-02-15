@@ -1,0 +1,39 @@
+[project]
+name = "book-highlights"
+version = "1.0.0"
+description = "Book highlights with semantic search and vector space visualization"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "sentence-transformers>=2.2.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "umap-learn>=0.5.0",
+    "matplotlib>=3.7.0",
+    "adjustText>=0.8.0",
+    "plotly>=5.14.0",
+    "requests>=2.31.0",
+    "torch>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ipython>=8.0.0",
+    "jupyter>=1.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []
+
+[tool.uv.sources]
+# Use CPU-only PyTorch to save disk space (matches Netlify config)
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
