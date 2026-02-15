@@ -99,6 +99,12 @@ layout: books-home
 
     <a href="{{ book.url | relative_url }}" style="text-decoration: none; color: inherit;">
       <div class="book-container">
+        {% assign highlights_count = book.highlights | size %}
+        {% if highlights_count > 0 %}
+          <div class="highlight-badge" title="{{ highlights_count }} highlight{% if highlights_count != 1 %}s{% endif %}">
+            {{ highlights_count }}
+          </div>
+        {% endif %}
         {% include lazyload.html image_src=book.coverImage image_alt=book.title image_title=book.title %}
         <h2 class="book-title">{{ book.title }}</h2>
         <p class="book-author">{{ book.authors | join: ', ' }}</p>

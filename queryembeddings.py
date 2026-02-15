@@ -8,8 +8,8 @@ import torch
 
 print("Building database")
 
-# Load the model
-model = SentenceTransformer("all-MiniLM-L6-v2")
+# Load the model - multilingual for Italian + English support
+model = SentenceTransformer("intfloat/multilingual-e5-small")
 model.max_seq_length = 256
 
 # Read the CSV file

@@ -24,8 +24,8 @@ exports.handler = async (event) => {
     // Extract query from event
     const query = event.queryStringParameters.q;
 
-    // Initialize the feature extraction pipeline
-    let extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+    // Initialize the feature extraction pipeline - multilingual for Italian + English
+    let extractor = await pipeline('feature-extraction', 'Xenova/multilingual-e5-small');
 
     // Calculate query embedding
     const queryEmbeddingOutput = await extractor(query, { pooling: 'mean', normalize: true });

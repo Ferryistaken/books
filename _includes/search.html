@@ -1,96 +1,385 @@
-<div id="searchModal" style="display:none; position:fixed; z-index:1; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4); padding-top:60px;">
-    <div id="searchmodalbg" style="margin:5% auto; padding:15px; border:1px solid #888; width:80%; border-radius: 10px;">
-        <!-- Search Bar -->
-        <div style="display: flex; align-items: center; gap: 10px; border-radius: 2px;">
-            <input type="text" id="searchQuery" style="width: 90%;" placeholder="Enter semantic search query (everything is working, it just takes a bit) ...">
-            <button id="searchButton" style="border: none; background: none;">
-                <img src="/assets/enter.svg" alt="Search" style="width: 24px; height: 24px; cursor: pointer;">
-            </button>
-            <button onclick="document.getElementById('searchModal').style.display='none'" style="border: none; background: none;">
-                <img src="/assets/cross.svg" alt="Close" style="width: 24px; height: 24px; cursor: pointer;">
-            </button>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+    #searchModal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(44, 44, 44, 0.8);
+        backdrop-filter: blur(4px);
+        animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    #searchModalContent {
+        background: #FAF8F5;
+        margin: 8% auto;
+        padding: 2.5rem;
+        max-width: 900px;
+        border-radius: 2px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    #searchModalHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    #searchModalTitle {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-size: 2rem;
+        color: #1a1a1a;
+        margin: 0;
+    }
+
+    #closeSearchModal {
+        border: none;
+        background: none;
+        font-size: 2rem;
+        color: #666;
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.2s ease;
+    }
+
+    #closeSearchModal:hover {
+        color: #1a1a1a;
+    }
+
+    #searchInputWrapper {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+    }
+
+    #searchQuery {
+        flex: 1;
+        padding: 0.875rem 1.125rem;
+        font-size: 1rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        border: 2px solid #d4d0c8;
+        background: #fff;
+        color: #2c2c2c;
+        border-radius: 2px;
+        transition: border-color 0.2s ease;
+    }
+
+    #searchQuery:focus {
+        outline: none;
+        border-color: #2b5e49;
+    }
+
+    #searchQuery::placeholder {
+        color: #999;
+    }
+
+    #searchButton {
+        padding: 0.875rem 1.75rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        background: #2b5e49;
+        color: #fff;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        white-space: nowrap;
+    }
+
+    #searchButton:hover {
+        background: #1a3729;
+    }
+
+    #searchButton:disabled {
+        background: #999;
+        cursor: not-allowed;
+    }
+
+    #searchStatus {
+        text-align: center;
+        padding: 2rem;
+        color: #666;
+        font-style: italic;
+        display: none;
+    }
+
+    #searchResults {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .search-result {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        background: #fff;
+        border-left: 3px solid #2b5e49;
+        border-radius: 2px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-result:hover {
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-result-text {
+        font-size: 1.0625rem;
+        line-height: 1.7;
+        color: #2c2c2c;
+        margin-bottom: 0.75rem;
+        font-weight: 400;
+    }
+
+    .search-result-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        font-size: 0.9375rem;
+    }
+
+    .search-result-title {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-style: italic;
+        color: #1a1a1a;
+    }
+
+    .search-result-similarity {
+        font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        color: #666;
+        font-size: 0.875rem;
+    }
+
+    .search-result-link {
+        color: #2b5e49 !important;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+    .search-result-link:hover {
+        color: #1a3729 !important;
+        text-decoration: underline;
+    }
+
+    #openSearchModal {
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s ease;
+    }
+
+    #openSearchModal:hover {
+        opacity: 0.7;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #d4d0c8;
+        border-top-color: #2b5e49;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-right: 0.5rem;
+    }
+</style>
+
+<div id="searchModal">
+    <div id="searchModalContent">
+        <div id="searchModalHeader">
+            <h2 id="searchModalTitle">Semantic Search</h2>
+            <button id="closeSearchModal" aria-label="Close search">&times;</button>
         </div>
 
-        <!-- Results Display Area -->
+        <div id="searchInputWrapper">
+            <input
+                type="text"
+                id="searchQuery"
+                placeholder="Search your highlights in English or Italian..."
+                autocomplete="off"
+            >
+            <button id="searchButton">Search</button>
+        </div>
+
+        <div id="searchStatus"></div>
         <div id="searchResults"></div>
     </div>
 </div>
 
 <!-- Trigger/Open The Modal -->
-<button id="openSearchModal" style="max-width: 12%; border: none; background: none;">
-    <svg transform="translate(0,4)" class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+<button id="openSearchModal" aria-label="Open search">
+    <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
 </button>
 
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('searchButton').addEventListener('click', performSearch);
-        document.getElementById('searchQuery').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                performSearch();
-            }
-        });
-        document.getElementById('openSearchModal').addEventListener('click', function() {
-            document.getElementById('searchModal').style.display = 'block';
-            document.getElementById('searchModal').focus();
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('searchModal');
+        const openBtn = document.getElementById('openSearchModal');
+        const closeBtn = document.getElementById('closeSearchModal');
+        const searchBtn = document.getElementById('searchButton');
+        const searchInput = document.getElementById('searchQuery');
+
+        // Open modal
+        openBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            searchInput.focus();
         });
 
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                document.getElementById('searchModal').style.display = 'none';
+        // Close modal
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Close on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'block') {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Close on backdrop click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Search on button click
+        searchBtn.addEventListener('click', performSearch);
+
+        // Search on enter
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
             }
         });
     });
 
     function performSearch() {
-        var query = document.getElementById('searchQuery').value;
-        var searchUrl = `{{ site.url }}/.netlify/functions/search?q=${encodeURIComponent(query)}`;
+        const query = document.getElementById('searchQuery').value.trim();
+        const statusDiv = document.getElementById('searchStatus');
+        const resultsDiv = document.getElementById('searchResults');
+        const searchBtn = document.getElementById('searchButton');
+
+        if (!query) {
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = 'Please enter a search query.';
+            resultsDiv.innerHTML = '';
+            return;
+        }
+
+        // Show loading state
+        searchBtn.disabled = true;
+        searchBtn.innerHTML = '<span class="loading-spinner"></span>Searching...';
+        statusDiv.style.display = 'block';
+        statusDiv.innerHTML = '<span class="loading-spinner"></span>Searching through your highlights...';
+        resultsDiv.innerHTML = '';
+
+        const searchUrl = `{{ site.url }}/.netlify/functions/search?q=${encodeURIComponent(query)}`;
 
         fetch(searchUrl)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Search failed');
+                }
+                return response.json();
+            })
             .then(data => {
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'Search';
                 displayResults(data);
             })
             .catch(error => {
                 console.error('Error:', error);
-                displayResults(["Error: Could not retrieve results"]);
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'Search';
+                statusDiv.style.display = 'block';
+                statusDiv.innerHTML = '❌ Search failed. Please try again.';
+                resultsDiv.innerHTML = '';
             });
     }
 
     function displayResults(results) {
-    console.log(results);
-    var resultsDiv = document.getElementById('searchResults');
-    resultsDiv.innerHTML = '';
-    results.forEach(result => {
-        var lineBreak = document.createElement("br");
-        var para = document.createElement("p");
+        const statusDiv = document.getElementById('searchStatus');
+        const resultsDiv = document.getElementById('searchResults');
 
-        var highlightSpan = document.createElement("span");
-        highlightSpan.style.backgroundColor = "rgba(255, 226, 130, 0.5)";
-        highlightSpan.style.padding = "2px";
-        highlightSpan.textContent = result.sentence;
+        if (!results || results.length === 0) {
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = 'No results found. Try a different query.';
+            resultsDiv.innerHTML = '';
+            return;
+        }
 
-        para.appendChild(highlightSpan);
+        statusDiv.style.display = 'none';
+        resultsDiv.innerHTML = '';
 
-        var titleSpan = document.createElement("span");
-        titleSpan.textContent = result.title;
-        titleSpan.style.fontStyle = 'italic';
-        para.appendChild(lineBreak);
-        para.appendChild(titleSpan);
+        results.forEach(result => {
+            const resultEl = document.createElement('div');
+            resultEl.className = 'search-result';
 
+            const textEl = document.createElement('div');
+            textEl.className = 'search-result-text';
+            textEl.textContent = result.sentence;
 
-        var similaritySpan = document.createElement("span");
-        similaritySpan.style.fontFamily = 'monospace';
-        similaritySpan.textContent = ` [${result.similarity.toFixed(2)}]`;
+            const metaEl = document.createElement('div');
+            metaEl.className = 'search-result-meta';
 
-        para.appendChild(similaritySpan);
+            const titleEl = document.createElement('span');
+            titleEl.className = 'search-result-title';
+            titleEl.textContent = result.title;
 
-        var highlightLink = document.createElement("a");
-        highlightLink.href = `{{ site.url }}/books/${result.isbn}#${result.index}`;
-        highlightLink.textContent = " View Highlight";
-        highlightLink.target = "_blank";
-        para.appendChild(highlightLink);
+            const similarityEl = document.createElement('span');
+            similarityEl.className = 'search-result-similarity';
+            similarityEl.textContent = `[${result.similarity.toFixed(2)}]`;
 
-        resultsDiv.appendChild(para);
-    });
-}
+            const linkEl = document.createElement('a');
+            linkEl.className = 'search-result-link';
+            linkEl.href = `{{ site.url }}/books/${result.isbn}#${result.index}`;
+            linkEl.textContent = 'View highlight →';
+            linkEl.target = '_blank';
+
+            metaEl.appendChild(titleEl);
+            metaEl.appendChild(similarityEl);
+            metaEl.appendChild(linkEl);
+
+            resultEl.appendChild(textEl);
+            resultEl.appendChild(metaEl);
+            resultsDiv.appendChild(resultEl);
+        });
+    }
 </script>

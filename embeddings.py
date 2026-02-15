@@ -45,8 +45,8 @@ if not cache_valid:
     cache_dir = os.path.expanduser("~/.cache/sentence_transformers")
     os.makedirs(cache_dir, exist_ok=True)
 
-    # Load the model (will use cache if available)
-    model = SentenceTransformer("all-MiniLM-L6-v2", cache_folder=cache_dir)
+    # Load the model (will use cache if available) - multilingual for Italian + English
+    model = SentenceTransformer("intfloat/multilingual-e5-small", cache_folder=cache_dir)
     model.max_seq_length = 256
 
     print("Loading data")

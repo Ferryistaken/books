@@ -192,6 +192,30 @@ layout: compress
       font-size: 0.9rem;
     }
 
+    .book-container {
+      position: relative;
+    }
+
+    .highlight-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(43, 94, 73, 0.9);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 12px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .book-container:hover .highlight-badge {
+      transform: scale(1.05);
+    }
+
     iframe {
       border: none !important;
       border-radius: 8px;
@@ -269,6 +293,11 @@ layout: compress
 
     body[data-theme="dark"] .book-author {
       color: #999 !important;
+    }
+
+    body[data-theme="dark"] .highlight-badge {
+      background: rgba(95, 184, 148, 0.9);
+      color: #1a1a1a;
     }
 
     body[data-theme="dark"] main > p:first-of-type {
